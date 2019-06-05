@@ -36,5 +36,16 @@
 }
 
 .task-checkbox {
-    margin-right: 10px; 
+    margin-right: 10px;
+}
+
+.add-task-list {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    z-index: 1;
+}
+
+.page__bd {
+    padding-bottom: 80px;
 }

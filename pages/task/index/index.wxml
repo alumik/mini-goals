@@ -19,6 +19,17 @@
             <view class="weui-search-bar__cancel-btn" hidden="{{!m_search_showed}}" bindtap="hideInput">取消</view>
         </view>
 
+        <view class="weui-cells weui-cells_after-title add-task-list">
+            <view class="weui-cell weui-cell_input">
+                <view class="weui-cell__bd">
+                    <input class="weui-input" placeholder="新建目标清单" bindinput="createTaskListTyping" bindconfirm="createTaskList" value="{{m_create_task_list_str}}" />
+                </view>
+                <view class="weui-cell__ft">
+                    <text class="fa fa-lg fa-plus-square-o text-secondary" bindtap="createTaskList"></text>
+                </view>
+            </view>
+        </view>
+
         <view wx:if="{{m_labels.length > 0}}" class="all-labels">
             <view class="badge badge-pill {{m_label == 0 ? 'badge-info' : 'badge-secondary'}} label" bindtap="applyLabel" data-id="0">全部</view>
             <view wx:for="{{m_labels}}" wx:key="id" wx:for-item="label" class="badge badge-pill {{m_label == label.id ? 'badge-info' : 'badge-secondary'}} label" bindtap="applyLabel" data-id="{{label.id}}">{{label.name}}</view>

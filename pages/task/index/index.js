@@ -4,6 +4,7 @@ const fly = app.globalData.fly
 Page({
     data: {
         m_search_showed: false,
+        m_create_task_list_str: '',
 
         m_name: '',
         m_archived: 0,
@@ -108,6 +109,29 @@ Page({
             self.loadTaskLists()
         }).catch(err => {
             console.log(err)
+        })
+    },
+
+    createTaskList: function () {
+        const self = this
+        fly.post(app.globalData.server_url.task_list, {
+            openid: app.globalData.openid,
+            content: {
+                "name": this.data.m_create_task_list_str
+            }
+        }).then(function (response) {
+            self.setData({
+                m_create_task_list_str: ''
+            })
+            self.loadTaskLists()
+        }).catch(err => {
+            console.log(err)
+        })
+    },
+
+    createTaskListTyping: function (e) {
+        this.setData({
+            m_create_task_list_str: e.detail.value
         })
     },
 
