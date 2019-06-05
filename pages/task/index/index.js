@@ -1,3 +1,5 @@
+// pages/task/index/index.js
+
 const app = getApp()
 const fly = app.globalData.fly
 
@@ -132,6 +134,12 @@ Page({
     createTaskListTyping: function (e) {
         this.setData({
             m_create_task_list_str: e.detail.value
+        })
+    },
+
+    viewTaskList: function (e) {
+        wx.navigateTo({
+            url: '/pages/task/view/view?id=' + e.currentTarget.dataset.id
         })
     },
 

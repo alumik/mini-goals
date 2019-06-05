@@ -61,7 +61,7 @@
                 </view>
             </view>
             <view class="weui-panel__ft">
-                <view class="weui-cell weui-cell_access weui-cell_link">
+                <view class="weui-cell weui-cell_access weui-cell_link" bindtap="viewTaskList" data-id="{{task_list.id}}">
                     <view class="weui-cell__bd">查看详情</view>
                     <view class="weui-cell__ft weui-cell__ft_in-access"></view>
                 </view>
