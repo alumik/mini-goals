@@ -709,13 +709,13 @@ page{
 
 /* 文本设置-start */
 
-text{
+/* text{
   font-family: var(--font-family-default);
-}
+} */
 
-view{
+/* view{
   font-family: var(--font-family-default);
-}
+} */
 
 .text-justify {
   text-align: justify !important;

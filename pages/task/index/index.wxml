@@ -20,13 +20,17 @@
         </view>
 
         <view wx:if="{{m_labels.length > 0}}" class="all-labels">
-            <view class="badge badge-pill {{m_label == 0 ? 'badge-success' : 'badge-secondary'}} label" bindtap="applyLabel" data-id="0">全部</view>
-            <view wx:for="{{m_labels}}" wx:key="id" wx:for-item="label" class="badge badge-pill {{m_label == label.id ? 'badge-success' : 'badge-secondary'}} label" bindtap="applyLabel" data-id="{{label.id}}">{{label.name}}</view>
+            <view class="badge badge-pill {{m_label == 0 ? 'badge-info' : 'badge-secondary'}} label" bindtap="applyLabel" data-id="0">全部</view>
+            <view wx:for="{{m_labels}}" wx:key="id" wx:for-item="label" class="badge badge-pill {{m_label == label.id ? 'badge-info' : 'badge-secondary'}} label" bindtap="applyLabel" data-id="{{label.id}}">{{label.name}}</view>
         </view>
 
         <view wx:for="{{m_task_lists}}" wx:key="id" wx:for-item="task_list" class="weui-panel weui-panel_access">
             <view class="weui-panel__hd task-list__hd">
                 {{task_list.name}}
+                <view class="pull-right">
+                    <text class="fa-lg text-secondary fa fa-angle-up sort-arrow" bindtap="sortTaskList" data-dir="{{-1}}" data-index="{{index}}"></text>
+                    <text class="fa-lg text-secondary fa fa-angle-down sort-arrow" bindtap="sortTaskList" data-dir="{{1}}" data-index="{{index}}"></text>
+                </view>
             </view>
             <view class="weui-panel__bd">
                 <view class="weui-media-box weui-media-box_text">

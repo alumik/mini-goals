@@ -2,7 +2,8 @@
 
 const Fly = require('miniprogram_npm/flyio/index')
 const fly = new Fly()
-const server_url = 'http://localhost/api/v1/'
+const local_server_url = 'http://localhost/api/v1/'
+const server_url = 'https://aliyun.alumik.cn:5181/api/v1/'
 
 App({
     onLaunch: function () {
