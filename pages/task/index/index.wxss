@@ -16,7 +16,7 @@
 }
 
 .badges {
-    padding-top: 5px;
+    margin: 10px -3px 0 -3px;
     padding-bottom: 0;
 }
 
