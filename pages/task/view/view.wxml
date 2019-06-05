@@ -6,44 +6,52 @@
         <view class="weui-cells weui-cells_after-title">
             <view class="weui-cell weui-cell_input">
                 <view class="weui-cell__bd">
-                    <input class="weui-input" placeholder="输入清单标题" value="{{m_task_list.name}}" bindinput="inputTaskListName" bindblur="updateTaskList" />
+                    <input class="weui-input" placeholder="请输入清单标题" value="{{m_task_list.name}}" bindinput="inputTaskListName" bindblur="updateTaskList" />
                 </view>
             </view>
         </view>
 
         <view class="weui-cells__title">待完成目标</view>
         <view class="weui-cells weui-cells_after-title">
-            <view class="weui-cell">
-                <view class="weui-cell__hd">
-                    <image src="{{icon}}" style="margin-right: 5px;vertical-align: middle;width:20px; height: 20px;"></image>
+            <checkbox-group wx:if="{{m_task_list.grouped_tasks.unfinished.count > 0}}" bindchange="changeUnfinished">
+                <view class="weui-cell weui-cell_input" wx:for="{{m_task_list.grouped_tasks.unfinished.content}}" wx:for-item="task" wx:key="id">
+                    <label>
+                        <checkbox class="weui-check" value="{{task.id}}" checked="{{task.finished}}" />
+                        <view class="weui-cell__hd weui-check__hd_in-checkbox">
+                            <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!task.finished}}"></icon>
+                            <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{task.finished}}"></icon>
+                        </view>
+                    </label>
+                    <view class="weui-cell__bd">
+                        <input class="weui-input" placeholder="请输入目标内容" value="{{task.content}}" bindinput="inputTaskName" bindblur="updateTask" data-index="{{index}}" data-type="unfinished" />
+                    </view>
                 </view>
-                <view class="weui-cell__bd">标题文字</view>
-                <view class="weui-cell__ft">说明文字</view>
-            </view>
-            <view class="weui-cell">
-                <view class="weui-cell__hd">
-                    <image src="{{icon}}" style="margin-right: 5px;vertical-align: middle;width:20px; height: 20px;"></image>
+            </checkbox-group>
+            <view wx:else class="weui-cell weui-cell_input">
+                <view class="weui-cell__bd">
+                    <input class="weui-input" placeholder="请输入目标内容" value="{{task.content}}" />
                 </view>
-                <view class="weui-cell__bd">标题文字</view>
-                <view class="weui-cell__ft">说明文字</view>
             </view>
         </view>
 
         <view class="weui-cells__title">已完成目标</view>
         <view class="weui-cells weui-cells_after-title">
-            <view class="weui-cell">
-                <view class="weui-cell__hd">
-                    <image src="{{icon}}" style="margin-right: 5px;vertical-align: middle;width:20px; height: 20px;"></image>
+            <checkbox-group wx:if="{{m_task_list.grouped_tasks.finished.count > 0}}" bindchange="changeFinished">
+                <view class="weui-cell weui-cell_input" wx:for="{{m_task_list.grouped_tasks.finished.content}}" wx:for-item="task" wx:key="id">
+                    <label>
+                        <checkbox class="weui-check" value="{{task.id}}" checked="{{task.finished}}" />
+                        <view class="weui-cell__hd weui-check__hd_in-checkbox">
+                            <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!task.finished}}"></icon>
+                            <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{task.finished}}"></icon>
+                        </view>
+                    </label>
+                    <view class="weui-cell__bd">
+                        <input class="weui-input" placeholder="请输入目标内容" value="{{task.content}}" bindinput="inputTaskName" bindblur="updateTask" data-index="{{index}}" data-type="finished" />
+                    </view>
                 </view>
-                <view class="weui-cell__bd">标题文字</view>
-                <view class="weui-cell__ft">说明文字</view>
-            </view>
-            <view class="weui-cell">
-                <view class="weui-cell__hd">
-                    <image src="{{icon}}" style="margin-right: 5px;vertical-align: middle;width:20px; height: 20px;"></image>
-                </view>
-                <view class="weui-cell__bd">标题文字</view>
-                <view class="weui-cell__ft">说明文字</view>
+            </checkbox-group>
+            <view wx:else class="weui-cell">
+                <view class="weui-cell__bd">暂无目标</view>
             </view>
         </view>
 

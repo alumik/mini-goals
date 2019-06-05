@@ -16,7 +16,7 @@ Page({
         m_labels: [],
     },
 
-    onLoad: function (options) {
+    onShow: function (options) {
         if (app.globalData.openid) {
             this.loadTaskLists()
             this.loadLabels()
@@ -83,12 +83,12 @@ Page({
                 openid: app.globalData.openid,
                 content: [
                     {
-                        "id": this.data.m_task_lists[index].id,
-                        "order": this.data.m_task_lists[index + dir].order
+                        id: this.data.m_task_lists[index].id,
+                        order: this.data.m_task_lists[index + dir].order
                     },
                     {
-                        "id": this.data.m_task_lists[index + dir].id,
-                        "order": this.data.m_task_lists[index].order
+                        id: this.data.m_task_lists[index + dir].id,
+                        order: this.data.m_task_lists[index].order
                     }
                 ]
             }).then(function (response) {
@@ -104,8 +104,8 @@ Page({
         fly.put(app.globalData.server_url.task, {
             openid: app.globalData.openid,
             content: {
-                "id": e.currentTarget.dataset.id,
-                "finished": 1
+                id: e.currentTarget.dataset.id,
+                finished: 1
             }
         }).then(function (response) {
             self.loadTaskLists()
@@ -119,7 +119,7 @@ Page({
         fly.post(app.globalData.server_url.task_list, {
             openid: app.globalData.openid,
             content: {
-                "name": this.data.m_create_task_list_str
+                name: this.data.m_create_task_list_str
             }
         }).then(function (response) {
             self.setData({

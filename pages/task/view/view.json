@@ -1,4 +1,5 @@
 {
     "usingComponents": {},
-    "navigationBarTitleText": "目标清单详情"
+    "navigationBarTitleText": "目标清单详情",
+    "enablePullDownRefresh": true
 }
