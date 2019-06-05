@@ -35,7 +35,8 @@
             <view class="weui-panel__bd">
                 <view class="weui-media-box weui-media-box_text">
                     <view wx:if="{{task_list.grouped_tasks.unfinished.count + task_list.grouped_tasks.finished.count > 0}}">
-                        <view wx:for="{{task_list.grouped_tasks.unfinished.content}}" wx:key="id" wx:for-item="task" class="weui-media-box__title weui-media-box__title_in-text task">{{task.content}}
+                        <view wx:for="{{task_list.grouped_tasks.unfinished.content}}" wx:key="id" wx:for-item="task" class="weui-media-box__title weui-media-box__title_in-text task">
+                            <text class="fa fa-square-o task-checkbox" bindtap="finishTask" data-id="{{task.id}}"></text>{{task.content}}
                         </view>
                         <view wx:if="{{task_list.grouped_tasks.unfinished.count > 5}}" class="weui-media-box__desc task-list__brief">+{{task_list.grouped_tasks.unfinished.count - 5}} 项待完成
                         </view>

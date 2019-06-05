@@ -34,3 +34,7 @@
 .sort-arrow {
     margin-left: 15px;
 }
+
+.task-checkbox {
+    margin-right: 10px; 
+}

@@ -72,21 +72,21 @@ Page({
     },
 
     sortTaskList: function (e) {
-
         const self = this
         const index = e.currentTarget.dataset.index;
         const dir = e.currentTarget.dataset.dir;
         if (dir === -1 && index > 0 || dir === 1 && index < this.data.m_task_lists.length) {
             fly.put(app.globalData.server_url.task_list, {
                 openid: app.globalData.openid,
-                content: [{
-                    "id": this.data.m_task_lists[index].id,
-                    "order": this.data.m_task_lists[index + dir].order
-                },
-                {
-                    "id": this.data.m_task_lists[index + dir].id,
-                    "order": this.data.m_task_lists[index].order
-                }
+                content: [
+                    {
+                        "id": this.data.m_task_lists[index].id,
+                        "order": this.data.m_task_lists[index + dir].order
+                    },
+                    {
+                        "id": this.data.m_task_lists[index + dir].id,
+                        "order": this.data.m_task_lists[index].order
+                    }
                 ]
             }).then(function (response) {
                 self.loadTaskLists()
@@ -94,6 +94,21 @@ Page({
                 console.log(err)
             })
         }
+    },
+
+    finishTask: function (e) {
+        const self = this
+        fly.put(app.globalData.server_url.task, {
+            openid: app.globalData.openid,
+            content: {
+                "id": e.currentTarget.dataset.id,
+                "finished": 1
+            }
+        }).then(function (response) {
+            self.loadTaskLists()
+        }).catch(err => {
+            console.log(err)
+        })
     },
 
     showInput: function () {
