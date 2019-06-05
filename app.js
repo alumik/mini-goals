@@ -8,10 +8,14 @@ App({
     onLaunch: function () {
         wx.login({
             success: res => {
+                const app = this
                 fly.post(this.globalData.server_url.user, {
                     code: res.code
-                }).then(response => {
-                    this.globalData.openid = response.data.openid
+                }).then(function (response) {
+                    app.globalData.openid = response.data.openid
+                    if (app.openidReadyCallback) {
+                        app.openidReadyCallback()
+                    }
                 }).catch(err => {
                     console.log(err)
                 })
@@ -46,10 +50,12 @@ App({
     },
 
     globalData: {
+        fly: fly,
         userInfo: null,
         openid: null,
         server_url: {
-            user: server_url + 'user'
+            user: server_url + 'user',
+            task_list: server_url + 'task-list'
         }
     }
 })

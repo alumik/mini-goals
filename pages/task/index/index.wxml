@@ -1,2 +1,53 @@
 <!--pages/task/index/index.wxml-->
-<text>pages/task/index/index.wxml</text>
+
+<view class="page">
+    <view class="page__bd">
+        <view class="weui-search-bar">
+            <view class="weui-search-bar__form">
+                <view class="weui-search-bar__box">
+                    <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
+                    <input type="text" class="weui-search-bar__input" placeholder="搜索" value="{{search_val}}" focus="{{search_showed}}" bindinput="inputTyping" />
+                    <view class="weui-icon-clear" wx:if="{{search_val.length > 0}}" bindtap="clearInput">
+                        <icon type="clear" size="14"></icon>
+                    </view>
+                </view>
+                <label class="weui-search-bar__label" hidden="{{search_showed}}" bindtap="showInput">
+                    <icon class="weui-icon-search" type="search" size="14"></icon>
+                    <view class="weui-search-bar__text">搜索</view>
+                </label>
+            </view>
+            <view class="weui-search-bar__cancel-btn" hidden="{{!search_showed}}" bindtap="hideInput">取消</view>
+        </view>
+
+        <view wx:for="{{task_lists}}" wx:key="id" wx:for-item="task_list" class="weui-panel weui-panel_access">
+            <view class="weui-panel__hd task-list__hd">
+                {{task_list.name}}
+            </view>
+            <view class="weui-panel__bd">
+                <view class="weui-media-box weui-media-box_text">
+                    <view wx:if="{{task_list.grouped_tasks.unfinished.count + task_list.grouped_tasks.finished.count > 0}}">
+                        <view wx:for="{{task_list.grouped_tasks.unfinished.content}}" wx:key="id" wx:for-item="task" class="weui-media-box__title weui-media-box__title_in-text task">{{task.content}}
+                        </view>
+                        <view wx:if="{{task_list.grouped_tasks.unfinished.count > 5}}" class="weui-media-box__desc task-list__brief">+{{task_list.grouped_tasks.unfinished.count - 5}} 项待完成
+                        </view>
+                        <view wx:if="{{task_list.grouped_tasks.finished.count > 0}}" class="weui-media-box__desc task-list__brief">{{task_list.grouped_tasks.finished.count}} 项已完成
+                        </view>
+                    </view>
+                    <view wx:else class="weui-media-box__desc task-list__brief">清单内容为空</view>
+                    <view wx:if="{{task_list.labels.length > 0}}" class="badges">
+                        <text wx:for="{{task_list.labels}}" wx:key="id" wx:for-item="label">
+                            <text class="badge badge-pill badge-success">{{label.name}}</text>
+                        <text>{{" "}}</text>
+                        </text>
+                    </view>
+                </view>
+            </view>
+            <view class="weui-panel__ft">
+                <view class="weui-cell weui-cell_access weui-cell_link">
+                    <view class="weui-cell__bd">查看更多</view>
+                    <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>

@@ -1,1 +1,20 @@
 /* pages/task/index/index.wxss */
+
+.task-list__brief {
+    padding-top: 5px;
+}
+
+.task-list__hd {
+    font-size: 16px;
+    color: #000;
+}
+
+.task {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.badges {
+    padding-top: 5px;
+    padding-bottom: 0;
+}
