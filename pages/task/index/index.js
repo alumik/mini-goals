@@ -38,6 +38,10 @@ Page({
         })
     },
 
+    applySearch: function () {
+        this.loadTaskLists()
+    },
+
     showInput: function () {
         this.setData({
             search_showed: true
