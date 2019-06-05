@@ -1,14 +1,12 @@
 {
     "pages": [
-        "pages/task/view/view",
-
         "pages/task/index/index",
         "pages/habit/index/index",
         "pages/friend/index/index",
         "pages/mine/index/index",
+        "pages/task/view/view",
         "pages/index/index",
         "pages/logs/logs"
-        
     ],
     "tabBar": {
         "list": [
