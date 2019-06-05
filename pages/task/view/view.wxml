@@ -27,9 +27,14 @@
                     </view>
                 </view>
             </checkbox-group>
-            <view wx:else class="weui-cell weui-cell_input">
+            <view class="weui-cell weui-cell_input">
+                <view class="weui-cell__hd weui-check__hd_in-checkbox">
+                <view class="add-task">
+                    <text class="fa fa-lg fa-plus-circle text-secondary"></text>
+                    </view>
+                </view>
                 <view class="weui-cell__bd">
-                    <input class="weui-input" placeholder="请输入目标内容" value="{{task.content}}" />
+                    <input class="weui-input" placeholder="新建目标" value="{{m_create_task_str}}" bindinput="inputCreateTask" bindblur="createTask" />
                 </view>
             </view>
         </view>

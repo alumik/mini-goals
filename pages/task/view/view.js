@@ -6,6 +6,7 @@ const fly = app.globalData.fly
 Page({
     data: {
         m_task_list_id: 0,
+        m_create_task_str: '',
 
         m_task_list: null
     },
@@ -27,6 +28,9 @@ Page({
 
     refreshPage: function () {
         const self = this
+        wx.showLoading({
+            title: '加载中',
+        })
         fly.get(app.globalData.server_url.task_list, {
             openid: app.globalData.openid,
             id_task_list: this.data.m_task_list_id
@@ -34,6 +38,7 @@ Page({
             self.setData({
                 m_task_list: response.data
             })
+            wx.hideLoading()
         }).catch(err => {
             console.log(err)
         })
@@ -54,6 +59,12 @@ Page({
         }
         this.setData({
             m_task_list: this.data.m_task_list
+        })
+    },
+
+    inputCreateTask: function (e) {
+        this.setData({
+            m_create_task_str: e.detail.value
         })
     },
 
@@ -81,6 +92,26 @@ Page({
         }).catch(err => {
             console.log(err)
         })
+    },
+
+    createTask: function (e) {
+        const self = this
+        if (this.data.m_create_task_str !== '') {
+            fly.post(app.globalData.server_url.task, {
+                openid: app.globalData.openid,
+                content: {
+                    id_task_list: this.data.m_task_list_id,
+                    content: this.data.m_create_task_str
+                }
+            }).then(function (response) {
+                self.setData({
+                    m_create_task_str: ''
+                })
+                self.refreshPage()
+            }).catch(err => {
+                console.log(err)
+            })
+        }
     },
 
     changeUnfinished: function (e) {

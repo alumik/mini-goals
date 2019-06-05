@@ -36,6 +36,9 @@ Page({
 
     loadTaskLists: function () {
         const self = this
+        wx.showLoading({
+            title: '加载中',
+        })
         fly.get(app.globalData.server_url.task_list, {
             openid: app.globalData.openid,
             archived: this.data.m_archived,
@@ -45,6 +48,7 @@ Page({
             self.setData({
                 m_task_lists: response.data
             })
+            wx.hideLoading()
         }).catch(err => {
             console.log(err)
         })
@@ -116,19 +120,21 @@ Page({
 
     createTaskList: function () {
         const self = this
-        fly.post(app.globalData.server_url.task_list, {
-            openid: app.globalData.openid,
-            content: {
-                name: this.data.m_create_task_list_str
-            }
-        }).then(function (response) {
-            self.setData({
-                m_create_task_list_str: ''
+        if (this.data.m_create_task_list_str != '') {
+            fly.post(app.globalData.server_url.task_list, {
+                openid: app.globalData.openid,
+                content: {
+                    name: this.data.m_create_task_list_str
+                }
+            }).then(function (response) {
+                self.setData({
+                    m_create_task_list_str: ''
+                })
+                self.loadTaskLists()
+            }).catch(err => {
+                console.log(err)
             })
-            self.loadTaskLists()
-        }).catch(err => {
-            console.log(err)
-        })
+        }
     },
 
     createTaskListTyping: function (e) {

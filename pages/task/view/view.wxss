@@ -29,3 +29,8 @@
     margin: 0 -3px;
     padding-bottom: 0;
 }
+
+.add-task {
+    margin-left: 6.4px;
+    margin-right: 6.4px;
+}
