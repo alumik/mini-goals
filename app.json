@@ -1,12 +1,36 @@
 {
   "pages": [
+    "pages/task/index/index",
+    "pages/habit/index/index",
+    "pages/friend/index/index",
+    "pages/mine/index/index",
     "pages/index/index",
     "pages/logs/logs"
   ],
+  "tabBar": {
+    "list": [
+      {
+        "pagePath": "pages/task/index/index",
+        "text": "目标"
+      },
+      {
+        "pagePath": "pages/habit/index/index",
+        "text": "习惯"
+      },
+      {
+        "pagePath": "pages/friend/index/index",
+        "text": "朋友"
+      },
+      {
+        "pagePath": "pages/mine/index/index",
+        "text": "我的"
+      }
+    ]
+  },
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "WeChat",
+    "navigationBarTitleText": "小目标",
     "navigationBarTextStyle": "black"
   },
   "sitemapLocation": "sitemap.json"
