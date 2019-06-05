@@ -68,6 +68,21 @@ Page({
         })
     },
 
+    taskFocus: function (e) {
+        const index = e.currentTarget.dataset.index
+        let task = null
+        if (e.currentTarget.dataset.type === 'unfinished') {
+            task = this.data.m_task_list.grouped_tasks.unfinished.content[index]
+        } else {
+            task = this.data.m_task_list.grouped_tasks.finished.content[index]
+        }
+        task.focus = true
+        task.old_content = task.content
+        this.setData({
+            m_task_list: this.data.m_task_list
+        })
+    },
+
     updateTask: function (e) {
         const index = e.currentTarget.dataset.index
         let task = null
@@ -76,9 +91,27 @@ Page({
         } else {
             task = this.data.m_task_list.grouped_tasks.finished.content[index]
         }
-        fly.put(app.globalData.server_url.task, {
+        task.focus = false
+        this.setData({
+            m_task_list: this.data.m_task_list
+        })
+        if (task.old_content && task.old_content !== task.content && task.content !== '') {
+            fly.put(app.globalData.server_url.task, {
+                openid: app.globalData.openid,
+                content: task
+            }).catch(err => {
+                console.log(err)
+            })
+        }
+    },
+
+    deleteTask: function (e) {
+        const self = this
+        fly.delete(app.globalData.server_url.task, {
             openid: app.globalData.openid,
-            content: task
+            id_task: e.currentTarget.dataset.id
+        }).then(function (response) {
+            self.refreshPage()
         }).catch(err => {
             console.log(err)
         })

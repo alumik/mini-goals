@@ -23,7 +23,10 @@
                         </view>
                     </label>
                     <view class="weui-cell__bd">
-                        <input class="weui-input" placeholder="请输入目标内容" value="{{task.content}}" bindinput="inputTaskName" bindblur="updateTask" data-index="{{index}}" data-type="unfinished" />
+                        <input class="weui-input" placeholder="请输入目标内容" value="{{task.content}}" bindfocus="taskFocus" bindinput="inputTaskName" bindblur="updateTask" data-index="{{index}}" data-type="unfinished" />
+                    </view>
+                    <view class="weui-cell__ft" wx:if="{{task.focus}}" bindtap="deleteTask" data-id="{{task.id}}">
+                        <text class="fa fa-lg fa-times-circle text-secondary"></text>
                     </view>
                 </view>
             </checkbox-group>
@@ -51,7 +54,10 @@
                         </view>
                     </label>
                     <view class="weui-cell__bd">
-                        <input class="weui-input" placeholder="请输入目标内容" value="{{task.content}}" bindinput="inputTaskName" bindblur="updateTask" data-index="{{index}}" data-type="finished" />
+                        <input class="weui-input" placeholder="请输入目标内容" value="{{task.content}}" bindfocus="taskFocus" bindinput="inputTaskName" bindblur="updateTask" data-index="{{index}}" data-type="finished" />
+                    </view>
+                    <view class="weui-cell__ft" wx:if="{{task.focus}}" bindtap="deleteTask" data-id="{{task.id}}">
+                        <text class="fa fa-lg fa-times-circle text-secondary"></text>
                     </view>
                 </view>
             </checkbox-group>
