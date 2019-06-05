@@ -6,20 +6,25 @@
             <view class="weui-search-bar__form">
                 <view class="weui-search-bar__box">
                     <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
-                    <input type="text" class="weui-search-bar__input" placeholder="搜索" value="{{search_val}}" focus="{{search_showed}}" bindinput="inputTyping" bindconfirm="applySearch" />
-                    <view class="weui-icon-clear" wx:if="{{search_val.length > 0}}" bindtap="clearInput">
+                    <input type="text" class="weui-search-bar__input" placeholder="搜索" value="{{m_name}}" focus="{{m_search_showed}}" bindinput="inputTyping" bindconfirm="applySearch" />
+                    <view class="weui-icon-clear" wx:if="{{m_name.length > 0}}" bindtap="clearInput">
                         <icon type="clear" size="14"></icon>
                     </view>
                 </view>
-                <label class="weui-search-bar__label" hidden="{{search_showed}}" bindtap="showInput">
+                <label class="weui-search-bar__label" hidden="{{m_search_showed}}" bindtap="showInput">
                     <icon class="weui-icon-search" type="search" size="14"></icon>
                     <view class="weui-search-bar__text">搜索</view>
                 </label>
             </view>
-            <view class="weui-search-bar__cancel-btn" hidden="{{!search_showed}}" bindtap="hideInput">取消</view>
+            <view class="weui-search-bar__cancel-btn" hidden="{{!m_search_showed}}" bindtap="hideInput">取消</view>
         </view>
 
-        <view wx:for="{{task_lists}}" wx:key="id" wx:for-item="task_list" class="weui-panel weui-panel_access">
+        <view wx:if="{{m_labels.length > 0}}" class="all-labels">
+            <view class="badge badge-pill {{m_label == 0 ? 'badge-success' : 'badge-secondary'}} label" bindtap="applyLabel" data-id="0">全部</view>
+            <view wx:for="{{m_labels}}" wx:key="id" wx:for-item="label" class="badge badge-pill {{m_label == label.id ? 'badge-success' : 'badge-secondary'}} label" bindtap="applyLabel" data-id="{{label.id}}">{{label.name}}</view>
+        </view>
+
+        <view wx:for="{{m_task_lists}}" wx:key="id" wx:for-item="task_list" class="weui-panel weui-panel_access">
             <view class="weui-panel__hd task-list__hd">
                 {{task_list.name}}
             </view>
@@ -35,10 +40,7 @@
                     </view>
                     <view wx:else class="weui-media-box__desc task-list__brief">清单内容为空</view>
                     <view wx:if="{{task_list.labels.length > 0}}" class="badges">
-                        <text wx:for="{{task_list.labels}}" wx:key="id" wx:for-item="label">
-                            <text class="badge badge-pill badge-success">{{label.name}}</text>
-                        <text>{{" "}}</text>
-                        </text>
+                        <view wx:for="{{task_list.labels}}" wx:key="id" wx:for-item="label" class="badge badge-pill badge-success label" bindtap="applyLabel" data-id="{{label.id}}">{{label.name}}</view>
                     </view>
                 </view>
             </view>

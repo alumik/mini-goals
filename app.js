@@ -55,7 +55,8 @@ App({
         openid: null,
         server_url: {
             user: server_url + 'user',
-            task_list: server_url + 'task-list'
+            task_list: server_url + 'task-list',
+            task_label: server_url + 'task-label'
         }
     }
 })

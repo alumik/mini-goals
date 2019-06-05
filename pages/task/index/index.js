@@ -3,35 +3,56 @@ const fly = app.globalData.fly
 
 Page({
     data: {
-        search_showed: false,
-        archived: 0,
-        search_val: '',
-        task_lists: []
+        m_search_showed: false,
+
+        m_name: '',
+        m_archived: 0,
+        m_label: 0,
+
+        m_task_lists: [],
+        m_labels: [],
     },
 
     onLoad: function (options) {
         if (app.globalData.openid) {
             this.loadTaskLists()
+            this.loadLabels()
         } else {
             app.openidReadyCallback = () => {
                 this.loadTaskLists()
+                this.loadLabels()
             }
         }
     },
 
     onPullDownRefresh: function (options) {
         this.loadTaskLists()
+        this.loadLabels()
     },
 
     loadTaskLists: function () {
         const self = this
         fly.get(app.globalData.server_url.task_list, {
             openid: app.globalData.openid,
-            archived: this.data.archived,
-            name: this.data.search_val
+            archived: this.data.m_archived,
+            name: this.data.m_name,
+            label: this.data.m_label
         }).then(function (response) {
             self.setData({
-                task_lists: response.data
+                m_task_lists: response.data
+            })
+        }).catch(err => {
+            console.log(err)
+        })
+    },
+
+    loadLabels: function () {
+        const self = this
+        fly.get(app.globalData.server_url.task_label, {
+            openid: app.globalData.openid
+        }).then(function (response) {
+            self.setData({
+                m_labels: response.data
             })
         }).catch(err => {
             console.log(err)
@@ -42,28 +63,35 @@ Page({
         this.loadTaskLists()
     },
 
+    applyLabel: function (e) {
+        this.setData({
+            m_label: e.currentTarget.dataset.id
+        })
+        this.loadTaskLists()
+    },
+
     showInput: function () {
         this.setData({
-            search_showed: true
+            m_search_showed: true
         })
     },
 
     hideInput: function () {
         this.setData({
-            search_val: '',
-            search_showed: false
+            m_name: '',
+            m_search_showed: false
         })
     },
 
     clearInput: function () {
         this.setData({
-            search_val: ''
+            m_name: ''
         })
     },
 
     inputTyping: function (e) {
         this.setData({
-            search_val: e.detail.value
+            m_name: e.detail.value
         })
     }
 })
