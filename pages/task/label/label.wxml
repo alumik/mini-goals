@@ -24,7 +24,9 @@
                 </view>
             </view>
         </view>
-        <view wx:if="{{mLabelNameTooLong}}" class="weui-cells__tips text-danger">标签名过长（大于 10 字符）</view>
+        <view wx:if="{{mLabelNameTooLong}}" class="weui-cells__tips text-danger">
+            标签名过长（大于 10 字符）
+        </view>
         <!-- end: 标签列表 -->
         <!-- begin: 操作按钮 -->
         <view class="page__bd_spacing">
