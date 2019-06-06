@@ -117,6 +117,26 @@ Page({
         })
     },
 
+    deleteTaskList: function (e) {
+        const self = this
+        wx.showModal({
+            title: '删除目标清单',
+            content: '确定要删除该目标清单吗？删除后无法撤销。',
+            success: function (sm) {
+                if (sm.confirm) {
+                    fly.delete(app.globalData.server_url.task_list, {
+                        openid: app.globalData.openid,
+                        id_task_list: self.data.m_task_list_id
+                    }).then(function (response) {
+                        wx.navigateBack()
+                    }).catch(err => {
+                        console.log(err)
+                    })
+                }
+            }
+        })
+    },
+
     updateTaskList: function () {
         const self = this
         fly.put(app.globalData.server_url.task_list, {
