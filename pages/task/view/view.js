@@ -31,7 +31,7 @@ Page({
         wx.showLoading({
             title: '加载中',
         })
-        fly.get(app.globalData.server_url.task_list, {
+        fly.get(app.globalData.server.task_list, {
             openid: app.globalData.openid,
             id_task_list: this.data.m_task_list_id
         }).then(function (response) {
@@ -96,7 +96,7 @@ Page({
             m_task_list: this.data.m_task_list
         })
         if (task.old_content && task.old_content !== task.content && task.content !== '') {
-            fly.put(app.globalData.server_url.task, {
+            fly.put(app.globalData.server.task, {
                 openid: app.globalData.openid,
                 content: task
             }).catch(err => {
@@ -107,7 +107,7 @@ Page({
 
     deleteTask: function (e) {
         const self = this
-        fly.delete(app.globalData.server_url.task, {
+        fly.delete(app.globalData.server.task, {
             openid: app.globalData.openid,
             id_task: e.currentTarget.dataset.id
         }).then(function (response) {
@@ -124,7 +124,7 @@ Page({
             content: '确定要删除该目标清单吗？删除后无法撤销。',
             success: function (sm) {
                 if (sm.confirm) {
-                    fly.delete(app.globalData.server_url.task_list, {
+                    fly.delete(app.globalData.server.task_list, {
                         openid: app.globalData.openid,
                         id_task_list: self.data.m_task_list_id
                     }).then(function (response) {
@@ -139,7 +139,7 @@ Page({
 
     updateTaskList: function () {
         const self = this
-        fly.put(app.globalData.server_url.task_list, {
+        fly.put(app.globalData.server.task_list, {
             openid: app.globalData.openid,
             content: [this.data.m_task_list]
         }).catch(err => {
@@ -150,7 +150,7 @@ Page({
     createTask: function (e) {
         const self = this
         if (this.data.m_create_task_str !== '') {
-            fly.post(app.globalData.server_url.task, {
+            fly.post(app.globalData.server.task, {
                 openid: app.globalData.openid,
                 content: {
                     id_task_list: this.data.m_task_list_id,
@@ -174,7 +174,7 @@ Page({
         for (let task of this.data.m_task_list.grouped_tasks.unfinished.content) {
             if (values.indexOf(task.id.toString()) !== -1) {
                 task.finished = 1
-                requests.push(fly.put(app.globalData.server_url.task, {
+                requests.push(fly.put(app.globalData.server.task, {
                     openid: app.globalData.openid,
                     content: {
                         id: task.id,
@@ -199,7 +199,7 @@ Page({
         for (let task of this.data.m_task_list.grouped_tasks.finished.content) {
             if (values.indexOf(task.id.toString()) === -1) {
                 task.finished = 0
-                requests.push(fly.put(app.globalData.server_url.task, {
+                requests.push(fly.put(app.globalData.server.task, {
                     openid: app.globalData.openid,
                     content: {
                         id: task.id,
@@ -219,7 +219,7 @@ Page({
 
     archive: function () {
         const self = this
-        fly.put(app.globalData.server_url.task_list, {
+        fly.put(app.globalData.server.task_list, {
             openid: app.globalData.openid,
             content: [
                 {

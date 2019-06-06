@@ -19,6 +19,8 @@
             <view class="weui-search-bar__cancel-btn" hidden="{{!m_search_showed}}" bindtap="hideInput">取消</view>
         </view>
 
+        <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo">授权使用微信小程序</button>
+
         <view class="weui-cells weui-cells_after-title add-task-list">
             <view class="weui-cell weui-cell_input">
                 <view class="weui-cell__bd">

@@ -32,7 +32,7 @@ Page({
                 labels.push(label.name)
             }
         }
-        fly.post(app.globalData.server_url.task_label, {
+        fly.post(app.globalData.server.task_label, {
             openid: app.globalData.openid,
             content: {
                 id_task_list: this.data.m_task_list_id,
@@ -59,11 +59,11 @@ Page({
             title: '加载中',
         })
 
-        const get_checked_labels = fly.get(app.globalData.server_url.task_list, {
+        const get_checked_labels = fly.get(app.globalData.server.task_list, {
             openid: app.globalData.openid,
             id_task_list: this.data.m_task_list_id
         })
-        const get_all_labels = fly.get(app.globalData.server_url.task_label, {
+        const get_all_labels = fly.get(app.globalData.server.task_label, {
             openid: app.globalData.openid
         })
 

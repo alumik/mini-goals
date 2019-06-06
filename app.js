@@ -2,15 +2,15 @@
 
 const Fly = require('miniprogram_npm/flyio/index')
 const fly = new Fly()
-const local_server_url = 'http://localhost/api/v1/'
-const server_url = 'https://aliyun.alumik.cn:5181/api/v1/'
+const local_server = 'http://localhost/api/v1/'
+const server = 'https://aliyun.alumik.cn:5181/api/v1/'
 
 App({
     onLaunch: function () {
         wx.login({
             success: res => {
                 const app = this
-                fly.post(this.globalData.server_url.user, {
+                fly.post(this.globalData.server.user, {
                     code: res.code
                 }).then(function (response) {
                     app.globalData.openid = response.data.openid
@@ -28,13 +28,14 @@ App({
                 if (res.authSetting['scope.userInfo']) {
                     wx.getUserInfo({
                         success: res => {
+                            console.log(res.userInfo)
                             this.globalData.userInfo = res.userInfo
 
                             if (this.userInfoReadyCallback) {
                                 this.userInfoReadyCallback(res)
                             }
 
-                            fly.put(this.globalData.server_url.user, {
+                            fly.put(this.globalData.server.user, {
                                 openid: this.globalData.openid,
                                 content: {
                                     name: res.userInfo.nickName,
@@ -54,11 +55,11 @@ App({
         fly: fly,
         userInfo: null,
         openid: null,
-        server_url: {
-            user: server_url + 'user',
-            task: server_url + 'task',
-            task_list: server_url + 'task-list',
-            task_label: server_url + 'task-label'
+        server: {
+            user: server + 'user',
+            task: server + 'task',
+            task_list: server + 'task-list',
+            task_label: server + 'task-label'
         }
     }
 })

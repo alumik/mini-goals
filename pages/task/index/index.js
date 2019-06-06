@@ -7,6 +7,8 @@ Page({
     data: {
         m_search_showed: false,
         m_create_task_list_str: '',
+        hasUserInfo: false,
+        canIUse: wx.canIUse('button.open-type.getUserInfo'),
 
         m_name: '',
         m_archived: 0,
@@ -14,6 +16,29 @@ Page({
 
         m_task_lists: [],
         m_labels: [],
+    },
+
+    onLoad: function (options) {
+        if (app.globalData.userInfo) {
+            this.setData({
+                hasUserInfo: true
+            })
+        } else if (this.data.canIUse) {
+            app.userInfoReadyCallback = res => {
+                this.setData({
+                    hasUserInfo: true
+                })
+            }
+        } else {
+            wx.getUserInfo({
+                success: res => {
+                    app.globalData.userInfo = res.userInfo
+                    this.setData({
+                        hasUserInfo: true
+                    })
+                }
+            })
+        }
     },
 
     onShow: function (options) {
@@ -39,7 +64,7 @@ Page({
         wx.showLoading({
             title: '加载中',
         })
-        fly.get(app.globalData.server_url.task_list, {
+        fly.get(app.globalData.server.task_list, {
             openid: app.globalData.openid,
             archived: this.data.m_archived,
             name: this.data.m_name,
@@ -56,7 +81,7 @@ Page({
 
     loadLabels: function () {
         const self = this
-        fly.get(app.globalData.server_url.task_label, {
+        fly.get(app.globalData.server.task_label, {
             openid: app.globalData.openid
         }).then(function (response) {
             self.setData({
@@ -90,7 +115,7 @@ Page({
         const index = e.currentTarget.dataset.index;
         const dir = e.currentTarget.dataset.dir;
         if (dir === -1 && index > 0 || dir === 1 && index < this.data.m_task_lists.length) {
-            fly.put(app.globalData.server_url.task_list, {
+            fly.put(app.globalData.server.task_list, {
                 openid: app.globalData.openid,
                 content: [
                     {
@@ -112,7 +137,7 @@ Page({
 
     finishTask: function (e) {
         const self = this
-        fly.put(app.globalData.server_url.task, {
+        fly.put(app.globalData.server.task, {
             openid: app.globalData.openid,
             content: {
                 id: e.currentTarget.dataset.id,
@@ -128,7 +153,7 @@ Page({
     createTaskList: function () {
         const self = this
         if (this.data.m_create_task_list_str != '') {
-            fly.post(app.globalData.server_url.task_list, {
+            fly.post(app.globalData.server.task_list, {
                 openid: app.globalData.openid,
                 content: {
                     name: this.data.m_create_task_list_str
@@ -178,6 +203,13 @@ Page({
     inputTyping: function (e) {
         this.setData({
             m_name: e.detail.value
+        })
+    },
+
+    getUserInfo: function (e) {
+        app.globalData.userInfo = e.detail.userInfo
+        this.setData({
+            hasUserInfo: true
         })
     }
 })
