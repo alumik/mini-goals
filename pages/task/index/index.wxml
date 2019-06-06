@@ -58,10 +58,8 @@
         <!-- begin: 任务列表 -->
         <view wx:for="{{mTaskLists}}" wx:key="id" wx:for-item="taskList" class="weui-panel weui-panel_access">
             <!-- begin: 列表项头部 -->
-            <view class="weui-panel__hd weui-cell_access weui-cell_link task-list__hd">
-                <view class="task-list__hd_text" bindtap="viewTaskList" data-id="{{taskList.id}}">
-                    {{taskList.name}}
-                </view>
+            <view class="weui-panel__hd task-list__hd">
+                <view class="task-list__hd_text">{{taskList.name}}</view>
                 <view class="pull-right">
                     <text class="fa fa-lg fa-angle-up text-secondary sort-arrow" bindtap="sortTaskLists" data-dir="-1" data-index="{{index}}"></text>
                     <text class="fa fa-lg fa-angle-down text-secondary sort-arrow" bindtap="sortTaskLists" data-dir="1" data-index="{{index}}"></text>
