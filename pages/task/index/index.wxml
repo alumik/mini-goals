@@ -36,8 +36,8 @@
         </view>
 
         <view wx:for="{{m_task_lists}}" wx:key="id" wx:for-item="task_list" class="weui-panel weui-panel_access">
-            <view class="weui-panel__hd task-list__hd">
-                {{task_list.name}}
+            <view class="weui-panel__hd weui-cell_access weui-cell_link task-list__hd">
+                <text class="task-list__hd_text" bindtap="viewTaskList" data-id="{{task_list.id}}">{{task_list.name}}</text>
                 <view class="pull-right">
                     <text class="fa-lg text-secondary fa fa-angle-up sort-arrow" bindtap="sortTaskList" data-dir="{{-1}}" data-index="{{index}}"></text>
                     <text class="fa-lg text-secondary fa fa-angle-down sort-arrow" bindtap="sortTaskList" data-dir="{{1}}" data-index="{{index}}"></text>

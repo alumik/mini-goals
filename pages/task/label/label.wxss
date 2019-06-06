@@ -1,1 +1,10 @@
 /* pages/task/label/label.wxss */
+
+.weui-btn:first-child {
+    margin-top: 30px;
+}
+
+.add-label {
+    margin-left: 6.4px;
+    margin-right: 6.4px;
+}

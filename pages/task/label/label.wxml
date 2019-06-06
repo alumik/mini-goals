@@ -1,2 +1,33 @@
 <!--pages/task/label/label.wxml-->
-<text>pages/task/label/label.wxml</text>
+
+<view class="page" xmlns:wx="http://www.w3.org/1999/xhtml">
+<view class="page__bd">
+    <view class="weui-cells__title">选择或新建标签</view>
+    <view class="weui-cells weui-cells_after-title">
+        <checkbox-group bindchange="checkboxChange">
+            <label class="weui-cell weui-check__label" wx:for="{{m_labels}}" wx:for-item="label" wx:key="id">
+                <checkbox class="weui-check" value="{{label.name}}" checked="{{label.checked}}" />
+                <view class="weui-cell__hd weui-check__hd_in-checkbox">
+                    <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!label.checked}}"></icon>
+                    <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{label.checked}}"></icon>
+                </view>
+                <view class="weui-cell__bd">{{label.name}}</view>
+            </label>
+        </checkbox-group>
+        <view class="weui-cell weui-cell_input">
+            <view class="weui-cell__hd weui-check__hd_in-checkbox">
+                <view class="add-label">
+                    <text class="fa fa-lg fa-plus-circle text-secondary"></text>
+                </view>
+            </view>
+            <view class="weui-cell__bd">
+                <input class="weui-input" placeholder="新建标签" value="{{m_create_label_str}}" bindinput="inputCreateLabel" bindblur="createLabel" />
+            </view>
+        </view>
+    </view>
+    <view wx:if="{{m_too_long}}" class="weui-cells__tips text-danger">标签名过长（大于 10 字符）</view>
+    <view class="page__bd_spacing">
+    <button class="weui-btn" type="primary" bindtap="save">保存</button>
+    </view>
+    </view>
+</view>

@@ -10,6 +10,12 @@
     font-weight: bold;
 }
 
+.task-list__hd_text {
+    word-wrap: break-word;
+    width: 80%;
+    display: inline-block;
+}
+
 .task {
     font-size: 14px;
     margin-bottom: 5px;

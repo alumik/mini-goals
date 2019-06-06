@@ -23,7 +23,7 @@ Page({
 
     onPullDownRefresh: function () {
         this.refreshPage()
-        wx.stopPullDownRefresh();
+        wx.stopPullDownRefresh()
     },
 
     refreshPage: function () {
