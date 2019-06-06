@@ -6,7 +6,8 @@
         "pages/mine/index/index",
         "pages/task/view/view",
         "pages/index/index",
-        "pages/logs/logs"
+        "pages/logs/logs",
+        "pages/task/label/label"
     ],
     "tabBar": {
         "list": [
