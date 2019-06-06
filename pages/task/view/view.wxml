@@ -89,7 +89,7 @@
         <!-- end: 标签 -->
         <!-- begin: 操作按钮 -->
         <view class="page__bd_spacing">
-            <button class="weui-btn" type="default" bindtap="archive">
+            <button class="weui-btn" type="default" bindtap="archiveTask">
                 {{mTaskList.archived ? "取消归档" : "归档"}}
             </button>
             <button class="weui-btn" type="warn" bindtap="deleteTaskList">删除</button>
