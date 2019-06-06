@@ -1,12 +1,8 @@
 {
     "pages": [
         "pages/task/index/index",
-        "pages/habit/index/index",
-        "pages/friend/index/index",
-        "pages/mine/index/index",
-        "pages/task/view/view",
         "pages/index/index",
-        "pages/logs/logs",
+        "pages/task/view/view",
         "pages/task/label/label"
     ],
     "tabBar": {
@@ -18,19 +14,19 @@
                 "selectedIconPath": "res/icons/green/dot-circle-o.png"
             },
             {
-                "pagePath": "pages/habit/index/index",
+                "pagePath": "pages/index/index",
                 "text": "习惯",
                 "iconPath": "res/icons/black/calendar-check-o.png",
                 "selectedIconPath": "res/icons/green/calendar-check-o.png"
             },
             {
-                "pagePath": "pages/friend/index/index",
+                "pagePath": "pages/index/index",
                 "text": "朋友",
                 "iconPath": "res/icons/black/users.png",
                 "selectedIconPath": "res/icons/green/users.png"
             },
             {
-                "pagePath": "pages/mine/index/index",
+                "pagePath": "pages/index/index",
                 "text": "我的",
                 "iconPath": "res/icons/black/address-card-o.png",
                 "selectedIconPath": "res/icons/green/address-card-o.png"

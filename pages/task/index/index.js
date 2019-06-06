@@ -19,6 +19,7 @@ Page({
     },
 
     onLoad: function (options) {
+        console.log(1)
         if (app.globalData.userInfo) {
             this.setData({
                 hasUserInfo: true

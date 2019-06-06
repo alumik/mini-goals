@@ -1,4 +1,3 @@
-/**app.wxss**/
 @import "styles/wxbootstrap.wxss";
 @import "styles/weui.wxss";
 @import "styles/fontawesome.wxss";
