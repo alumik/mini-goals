@@ -49,3 +49,12 @@ page {
     text-align: left;
     font-size: 14px;
 }
+
+.separator {
+    background: #e0e3da;
+    height: 3rpx;
+}
+
+.separator_spacing {
+    margin: 0 15px 0 15px;
+}

@@ -78,6 +78,13 @@ Page({
         this.loadTaskLists()
     },
 
+    applyArchived: function (e) {
+        this.setData({
+            m_archived: e.currentTarget.dataset.archived
+        })
+        this.loadTaskLists()
+    },
+
     sortTaskList: function (e) {
         const self = this
         const index = e.currentTarget.dataset.index;

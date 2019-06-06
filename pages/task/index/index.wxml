@@ -30,9 +30,17 @@
             </view>
         </view>
 
-        <view wx:if="{{m_labels.length > 0}}" class="all-labels">
-            <view class="badge badge-pill {{m_label == 0 ? 'badge-info' : 'badge-secondary'}} label" bindtap="applyLabel" data-id="0">全部</view>
-            <view wx:for="{{m_labels}}" wx:key="id" wx:for-item="label" class="badge badge-pill {{m_label == label.id ? 'badge-info' : 'badge-secondary'}} label" bindtap="applyLabel" data-id="{{label.id}}">{{label.name}}</view>
+        <view wx:if="{{m_labels.length > 0}}">
+            <view class="all-labels">
+                <view class="badge badge-pill {{m_label == 0 ? 'badge-info' : 'badge-secondary'}} label" bindtap="applyLabel" data-id="0">全部</view>
+                <view wx:for="{{m_labels}}" wx:key="id" wx:for-item="label" class="badge badge-pill {{m_label == label.id ? 'badge-info' : 'badge-secondary'}} label" bindtap="applyLabel" data-id="{{label.id}}">{{label.name}}</view>
+            </view>
+            <view class="separator separator_spacing"></view>
+        </view>
+
+        <view class="all-labels">
+            <view class="badge badge-pill {{m_archived == 0 ? 'badge-warning' : 'badge-secondary'}} label" bindtap="applyArchived" data-archived="0">全部</view>
+            <view class="badge badge-pill {{m_archived == 1 ? 'badge-warning' : 'badge-secondary'}} label" bindtap="applyArchived" data-archived="1">已归档</view>
         </view>
 
         <view wx:for="{{m_task_lists}}" wx:key="id" wx:for-item="task_list" class="weui-panel weui-panel_access">
