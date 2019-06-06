@@ -174,17 +174,19 @@ Page({
             parseInt(e.currentTarget.dataset.finished),
             parseInt(e.currentTarget.dataset.index)
         )
-        task.focus = false
-        this.setData({
-            mTaskList: this.data.mTaskList
-        })
-        if (task.oldContent && task.oldContent !== task.content && task.content !== '') {
-            fly.put('task', {
-                openid: app.globalData.openid,
-                content: task
-            }).catch(err => {
-                console.log(err)
+        if (task) {
+            task.focus = false
+            this.setData({
+                mTaskList: this.data.mTaskList
             })
+            if (task.oldContent && task.oldContent !== task.content && task.content !== '') {
+                fly.put('task', {
+                    openid: app.globalData.openid,
+                    content: task
+                }).catch(err => {
+                    console.log(err)
+                })
+            }
         }
     },
 
