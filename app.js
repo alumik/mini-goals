@@ -1,7 +1,9 @@
 import Fly from 'miniprogram_npm/flyio/index'
 
+const prodURL = 'https://aliyun.alumik.cn:5181/api/v1/'
+const devURL = 'http://localhost/api/v1/'
 const fly = new Fly()
-fly.config.baseURL = 'https://aliyun.alumik.cn:5181/api/v1/'
+fly.config.baseURL = prodURL
 
 App({
     onLaunch: function () {
@@ -10,9 +12,12 @@ App({
                 fly.post('user', {
                     code: res.code
                 }).then(response => {
-                    this.globalData.openid = response.data.openid
-                    if (this.onOpenidReady) {
-                        this.onOpenidReady()
+                    fly.config.headers = {
+                        'Session-ID': response.data.sessionId
+                    }
+                    this.globalData.sessionIdReady = true
+                    if (this.onSessionIdReady) {
+                        this.onSessionIdReady()
                     }
                 }).catch(err => {
                     console.log(err)
@@ -23,6 +28,6 @@ App({
 
     globalData: {
         fly: fly,
-        openid: null
+        sessionIdReady: false
     }
 })

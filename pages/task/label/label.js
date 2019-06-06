@@ -44,12 +44,9 @@ Page({
         })
 
         const getCheckedLabels = fly.get('task-list', {
-            openid: app.globalData.openid,
             id_task_list: this.data.mIdTaskList
         })
-        const getAllLabels = fly.get('task-label', {
-            openid: app.globalData.openid
-        })
+        const getAllLabels = fly.get('task-label')
 
         fly.all([getCheckedLabels, getAllLabels]).then(
             fly.spread((checkedLabels, allLabels) => {
@@ -142,11 +139,8 @@ Page({
             }
         }
         fly.post('task-label', {
-            openid: app.globalData.openid,
-            content: {
-                id_task_list: this.data.mIdTaskList,
-                labels: labels
-            }
+            id_task_list: this.data.mIdTaskList,
+            labels: labels
         }).then(response => {
             wx.navigateBack()
         }).catch(err => {

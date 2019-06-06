@@ -24,11 +24,11 @@ Page({
      * @param options
      */
     onShow: function (options) {
-        if (app.globalData.openid) {
+        if (app.globalData.sessionIdReady) {
             this.loadTaskLists()
             this.loadLabels()
         } else {
-            app.onOpenidReady = () => {
+            app.onSessionIdReady = () => {
                 this.loadTaskLists()
                 this.loadLabels()
             }
@@ -52,7 +52,6 @@ Page({
             title: '加载中'
         })
         fly.get('task-list', {
-            openid: app.globalData.openid,
             archived: this.data.mFilterArchived,
             name: this.data.mFilterName,
             label: this.data.mFilterIdLabel
@@ -70,9 +69,7 @@ Page({
      * 加载标签
      */
     loadLabels: function () {
-        fly.get('task-label', {
-            openid: app.globalData.openid
-        }).then(response => {
+        fly.get('task-label').then(response => {
             this.setData({
                 mLabels: response.data
             })
@@ -140,10 +137,7 @@ Page({
     createTaskList: function () {
         if (this.data.mCreateTaskList !== '') {
             fly.post('task-list', {
-                openid: app.globalData.openid,
-                content: {
-                    name: this.data.mCreateTaskList
-                }
+                name: this.data.mCreateTaskList
             }).then(response => {
                 this.setData({
                     mCreateTaskList: ''
@@ -166,8 +160,7 @@ Page({
 
         if (dir === -1 && index > 0 || dir === 1 && index < this.data.mTaskLists.length) {
             fly.put('task-list', {
-                openid: app.globalData.openid,
-                content: [
+                data: [
                     {
                         id: this.data.mTaskLists[index].id,
                         order: this.data.mTaskLists[index + dir].order
@@ -203,11 +196,8 @@ Page({
      */
     checkTask: function (e) {
         fly.put('task', {
-            openid: app.globalData.openid,
-            content: {
-                id: parseInt(e.currentTarget.dataset.id),
-                finished: 1
-            }
+            id: parseInt(e.currentTarget.dataset.id),
+            finished: 1
         }).then(response => {
             this.loadTaskLists()
         }).catch(err => {

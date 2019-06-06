@@ -63,7 +63,6 @@ Page({
             title: '加载中'
         })
         fly.get('task-list', {
-            openid: app.globalData.openid,
             id_task_list: this.data.mIdTaskList
         }).then(response => {
             this.setData({
@@ -148,11 +147,8 @@ Page({
     createTask: function (e) {
         if (this.data.mCreateTask !== '') {
             fly.post('task', {
-                openid: app.globalData.openid,
-                content: {
-                    id_task_list: this.data.mIdTaskList,
-                    content: this.data.mCreateTask
-                }
+                id_task_list: this.data.mIdTaskList,
+                content: this.data.mCreateTask
             }).then(response => {
                 this.setData({
                     mCreateTask: ''
@@ -180,10 +176,7 @@ Page({
                 mTaskList: this.data.mTaskList
             })
             if (task.oldContent && task.oldContent !== task.content && task.content !== '') {
-                fly.put('task', {
-                    openid: app.globalData.openid,
-                    content: task
-                }).catch(err => {
+                fly.put('task', task).catch(err => {
                     console.log(err)
                 })
             }
@@ -203,11 +196,8 @@ Page({
             if (values.indexOf(task.id.toString()) !== -1) {
                 task.finished = 1
                 requests.push(fly.put('task', {
-                    openid: app.globalData.openid,
-                    content: {
-                        id: task.id,
-                        finished: 1
-                    }
+                    id: task.id,
+                    finished: 1
                 }))
             }
         }
@@ -234,11 +224,8 @@ Page({
             if (values.indexOf(task.id.toString()) === -1) {
                 task.finished = 0
                 requests.push(fly.put('task', {
-                    openid: app.globalData.openid,
-                    content: {
-                        id: task.id,
-                        finished: 0
-                    }
+                    id: task.id,
+                    finished: 0
                 }))
             }
         }
@@ -257,8 +244,7 @@ Page({
      */
     archiveTask: function () {
         fly.put('task-list', {
-            openid: app.globalData.openid,
-            content: [
+            data: [
                 {
                     id: this.data.mIdTaskList,
                     archived: this.data.mTaskList.archived === 0 ? 1 : 0
@@ -278,7 +264,6 @@ Page({
      */
     deleteTask: function (e) {
         fly.delete('task', {
-            openid: app.globalData.openid,
             id_task: parseInt(e.currentTarget.dataset.id)
         }).then(response => {
             this.loadTaskList()
@@ -292,8 +277,7 @@ Page({
      */
     updateTaskList: function () {
         fly.put('task-list', {
-            openid: app.globalData.openid,
-            content: [
+            data: [
                 this.data.mTaskList
             ]
         }).catch(err => {
@@ -311,7 +295,6 @@ Page({
             success: res => {
                 if (res.confirm) {
                     fly.delete('task-list', {
-                        openid: app.globalData.openid,
                         id_task_list: this.data.mIdTaskList
                     }).then(response => {
                         wx.navigateBack()
