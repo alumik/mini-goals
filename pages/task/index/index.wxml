@@ -35,10 +35,10 @@
         <!-- begin: 标签筛选器 -->
         <view wx:if="{{mLabels.length > 0}}">
             <view class="all-labels">
-                <view class="badge badge-pill {{mFilterLabel === 0 ? 'badge-info' : 'badge-secondary'}} label" bindtap="applyFilterLabel" data-id="0">
+                <view class="badge badge-pill {{mFilterLabel === 0 ? 'badge-info' : 'badge-secondary'}} label" bindtap="applyFilterIdLabel" data-id="0">
                     全部
                 </view>
-                <view wx:for="{{mLabels}}" wx:key="id" wx:for-item="label" class="badge badge-pill {{mFilterLabel === label.id ? 'badge-info' : 'badge-secondary'}} label" bindtap="applyFilterLabel" data-id="{{label.id}}">
+                <view wx:for="{{mLabels}}" wx:key="id" wx:for-item="label" class="badge badge-pill {{mFilterLabel === label.id ? 'badge-info' : 'badge-secondary'}} label" bindtap="applyFilterIdLabel" data-id="{{label.id}}">
                     {{label.name}}
                 </view>
             </view>
