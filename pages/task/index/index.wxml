@@ -70,7 +70,7 @@
             <view class="weui-panel__bd">
                 <view class="weui-media-box weui-media-box_text">
                     <view wx:if="{{taskList.tasks.unfinished.count + taskList.tasks.finished.count > 0}}">
-                        <view wx:for="{{taskList.tasks.unfinished.content}}" wx:key="id" wx:for-item="task" class="weui-media-box__title weui-media-box__title_in-text task">
+                        <view wx:for="{{taskList.tasks.unfinished.content}}" wx:key="id" wx:for-item="task" wx:if="{{index < 5}}" class="weui-media-box__title weui-media-box__title_in-text task">
                             <text class="fa fa-square-o task-checkbox" bindtap="checkTask" data-id="{{task.id}}"></text>
                             {{task.content}}
                         </view>
