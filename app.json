@@ -9,7 +9,7 @@
         "list": [
             {
                 "pagePath": "pages/task/index/index",
-                "text": "目标",
+                "text": "任务",
                 "iconPath": "res/icons/black/dot-circle-o.png",
                 "selectedIconPath": "res/icons/green/dot-circle-o.png"
             },

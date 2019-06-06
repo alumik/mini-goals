@@ -1,78 +1,64 @@
-// pages/task/index/index.js
-
 const app = getApp()
 const fly = app.globalData.fly
 
 Page({
+    /**
+     * 页面的初始数据
+     */
     data: {
-        m_search_showed: false,
-        m_create_task_list_str: '',
-        hasUserInfo: false,
-        canIUse: wx.canIUse('button.open-type.getUserInfo'),
+        // 私有变量
+        mSearchShowed: false,
+        mCreateTaskList: '',
+        mFilterName: '',
+        mFilterArchived: 0,
+        mFilterIdLabel: 0,
 
-        m_name: '',
-        m_archived: 0,
-        m_label: 0,
-
-        m_task_lists: [],
-        m_labels: [],
+        // 页面数据
+        mTaskLists: [],
+        mLabels: []
     },
 
-    onLoad: function (options) {
-        console.log(1)
-        if (app.globalData.userInfo) {
-            this.setData({
-                hasUserInfo: true
-            })
-        } else if (this.data.canIUse) {
-            app.userInfoReadyCallback = res => {
-                this.setData({
-                    hasUserInfo: true
-                })
-            }
-        } else {
-            wx.getUserInfo({
-                success: res => {
-                    app.globalData.userInfo = res.userInfo
-                    this.setData({
-                        hasUserInfo: true
-                    })
-                }
-            })
-        }
-    },
-
+    /**
+     * 生命周期函数--监听页面显示
+     *
+     * @param options
+     */
     onShow: function (options) {
         if (app.globalData.openid) {
             this.loadTaskLists()
             this.loadLabels()
         } else {
-            app.openidReadyCallback = () => {
+            app.onOpenidReady = () => {
                 this.loadTaskLists()
                 this.loadLabels()
             }
         }
     },
 
-    onPullDownRefresh: function (options) {
+    /**
+     * 页面相关事件处理函数--监听用户下拉动作
+     */
+    onPullDownRefresh: function () {
         this.loadTaskLists()
         this.loadLabels()
-        wx.stopPullDownRefresh();
+        wx.stopPullDownRefresh()
     },
 
+    /**
+     * 加载任务清单
+     */
     loadTaskLists: function () {
-        const self = this
         wx.showLoading({
-            title: '加载中',
+            title: '加载中'
         })
-        fly.get(app.globalData.server.task_list, {
+        fly.get('task-list', {
             openid: app.globalData.openid,
-            archived: this.data.m_archived,
-            name: this.data.m_name,
-            label: this.data.m_label
-        }).then(function (response) {
-            self.setData({
-                m_task_lists: response.data
+            archived: this.data.mFilterArchived,
+            name: this.data.mFilterName,
+            label: this.data.mFilterIdLabel
+        }).then(response => {
+            this.setData({
+                mTaskLists: response.data
             })
             wx.hideLoading()
         }).catch(err => {
@@ -80,137 +66,180 @@ Page({
         })
     },
 
+    /**
+     * 加载标签
+     */
     loadLabels: function () {
-        const self = this
-        fly.get(app.globalData.server.task_label, {
+        fly.get('task-label', {
             openid: app.globalData.openid
-        }).then(function (response) {
-            self.setData({
-                m_labels: response.data
+        }).then(response => {
+            this.setData({
+                mLabels: response.data
             })
         }).catch(err => {
             console.log(err)
         })
     },
 
-    applySearch: function () {
+    /**
+     * 输入响应函数--创建任务清单
+     *
+     * @param e
+     */
+    inputCreateTaskList: function (e) {
+        this.setData({
+            mCreateTaskList: e.detail.value
+        })
+    },
+
+    /**
+     * 输入响应函数--按名称搜索
+     *
+     * @param e
+     */
+    inputFilterName: function (e) {
+        this.setData({
+            mFilterName: e.detail.value
+        })
+    },
+
+    /**
+     * 按名称搜索
+     */
+    applyFilterName: function () {
         this.loadTaskLists()
     },
 
-    applyLabel: function (e) {
+    /**
+     * 按标签 ID 搜索
+     *
+     * @param e
+     */
+    applyFilterIdLabel: function (e) {
         this.setData({
-            m_label: e.currentTarget.dataset.id
+            mFilterIdLabel: parseInt(e.currentTarget.dataset.id)
         })
         this.loadTaskLists()
     },
 
-    applyArchived: function (e) {
+    /**
+     * 按是否归档搜索
+     *
+     * @param e
+     */
+    applyFilterArchived: function (e) {
         this.setData({
-            m_archived: e.currentTarget.dataset.archived
+            mFilterArchived: parseInt(e.currentTarget.dataset.archived)
         })
         this.loadTaskLists()
     },
 
-    sortTaskList: function (e) {
-        const self = this
-        const index = e.currentTarget.dataset.index;
-        const dir = e.currentTarget.dataset.dir;
-        if (dir === -1 && index > 0 || dir === 1 && index < this.data.m_task_lists.length) {
-            fly.put(app.globalData.server.task_list, {
+    /**
+     * 创建任务清单
+     */
+    createTaskList: function () {
+        if (this.data.mCreateTaskList !== '') {
+            fly.post('task-list', {
+                openid: app.globalData.openid,
+                content: {
+                    name: this.data.mCreateTaskList
+                }
+            }).then(response => {
+                this.setData({
+                    mCreateTaskList: ''
+                })
+                this.loadTaskLists()
+            }).catch(err => {
+                console.log(err)
+            })
+        }
+    },
+
+    /**
+     * 排序任务清单
+     *
+     * @param e
+     */
+    sortTaskLists: function (e) {
+        const index = parseInt(e.currentTarget.dataset.index)
+        const dir = parseInt(e.currentTarget.dataset.dir)
+
+        if (dir === -1 && index > 0 || dir === 1 && index < this.data.mTaskLists.length) {
+            fly.put('task-list', {
                 openid: app.globalData.openid,
                 content: [
                     {
-                        id: this.data.m_task_lists[index].id,
-                        order: this.data.m_task_lists[index + dir].order
+                        id: this.data.mTaskLists[index].id,
+                        order: this.data.mTaskLists[index + dir].order
                     },
                     {
-                        id: this.data.m_task_lists[index + dir].id,
-                        order: this.data.m_task_lists[index].order
+                        id: this.data.mTaskLists[index + dir].id,
+                        order: this.data.mTaskLists[index].order
                     }
                 ]
-            }).then(function (response) {
-                self.loadTaskLists()
+            }).then(response => {
+                this.loadTaskLists()
             }).catch(err => {
                 console.log(err)
             })
         }
     },
 
-    finishTask: function (e) {
-        const self = this
-        fly.put(app.globalData.server.task, {
-            openid: app.globalData.openid,
-            content: {
-                id: e.currentTarget.dataset.id,
-                finished: 1
-            }
-        }).then(function (response) {
-            self.loadTaskLists()
-        }).catch(err => {
-            console.log(err)
-        })
-    },
-
-    createTaskList: function () {
-        const self = this
-        if (this.data.m_create_task_list_str != '') {
-            fly.post(app.globalData.server.task_list, {
-                openid: app.globalData.openid,
-                content: {
-                    name: this.data.m_create_task_list_str
-                }
-            }).then(function (response) {
-                self.setData({
-                    m_create_task_list_str: ''
-                })
-                self.loadTaskLists()
-            }).catch(err => {
-                console.log(err)
-            })
-        }
-    },
-
-    createTaskListTyping: function (e) {
-        this.setData({
-            m_create_task_list_str: e.detail.value
-        })
-    },
-
+    /**
+     * 查看任务清单详情
+     *
+     * @param e
+     */
     viewTaskList: function (e) {
         wx.navigateTo({
             url: '/pages/task/view/view?id=' + e.currentTarget.dataset.id
         })
     },
 
-    showInput: function () {
-        this.setData({
-            m_search_showed: true
+    /**
+     * 完成任务
+     *
+     * @param e
+     */
+    checkTask: function (e) {
+        fly.put('task', {
+            openid: app.globalData.openid,
+            content: {
+                id: parseInt(e.currentTarget.dataset.id),
+                finished: 1
+            }
+        }).then(response => {
+            this.loadTaskLists()
+        }).catch(err => {
+            console.log(err)
         })
     },
 
-    hideInput: function () {
+    /**
+     * 显示搜索框
+     */
+    showFilterName: function () {
         this.setData({
-            m_name: '',
-            m_search_showed: false
+            mSearchShowed: true
         })
     },
 
-    clearInput: function () {
+    /**
+     * 隐藏搜索框
+     */
+    hideFilterName: function () {
         this.setData({
-            m_name: ''
+            mFilterName: '',
+            mSearchShowed: false
         })
     },
 
-    inputTyping: function (e) {
+    /**
+     * 清空搜索框
+     */
+    clearFilterName: function () {
         this.setData({
-            m_name: e.detail.value
-        })
-    },
-
-    getUserInfo: function (e) {
-        app.globalData.userInfo = e.detail.userInfo
-        this.setData({
-            hasUserInfo: true
+            mFilterName: ''
         })
     }
 })

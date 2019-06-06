@@ -1,78 +1,105 @@
 <view class="page">
     <view class="page__bd">
+        <!-- begin: 搜索框 -->
         <view class="weui-search-bar search">
             <view class="weui-search-bar__form">
                 <view class="weui-search-bar__box">
                     <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
-                    <input type="text" class="weui-search-bar__input" placeholder="搜索" value="{{m_name}}" focus="{{m_search_showed}}" bindinput="inputTyping" bindconfirm="applySearch" />
-                    <view class="weui-icon-clear" wx:if="{{m_name.length > 0}}" bindtap="clearInput">
+                    <input type="text" class="weui-search-bar__input" placeholder="搜索" value="{{mFilterName}}" focus="{{mSearchShowed}}" bindinput="inputFilterName" bindconfirm="applyFilterName" />
+                    <view class="weui-icon-clear" wx:if="{{mFilerName.length > 0}}" bindtap="clearFilterName">
                         <icon type="clear" size="14"></icon>
                     </view>
                 </view>
-                <label class="weui-search-bar__label" hidden="{{m_search_showed}}" bindtap="showInput">
+                <label class="weui-search-bar__label" hidden="{{mSearchShowed}}" bindtap="showFilterName">
                     <icon class="weui-icon-search" type="search" size="14"></icon>
                     <view class="weui-search-bar__text">搜索</view>
                 </label>
             </view>
-            <view class="weui-search-bar__cancel-btn" hidden="{{!m_search_showed}}" bindtap="hideInput">取消</view>
+            <view class="weui-search-bar__cancel-btn" hidden="{{!mSearchShowed}}" bindtap="hideFilterName">
+                取消
+            </view>
         </view>
-
-        <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo">授权使用微信小程序</button>
-
+        <!-- end: 搜索框 -->
+        <!-- begin: 新建任务清单输入框 -->
         <view class="weui-cells weui-cells_after-title add-task-list">
             <view class="weui-cell weui-cell_input">
                 <view class="weui-cell__bd">
-                    <input class="weui-input" placeholder="新建目标清单" bindinput="createTaskListTyping" bindconfirm="createTaskList" value="{{m_create_task_list_str}}" />
+                    <input class="weui-input" placeholder="新建任务清单" bindinput="inputCreateTaskList" bindconfirm="createTaskList" value="{{mCreateTaskList}}" />
                 </view>
                 <view class="weui-cell__ft">
                     <text class="fa fa-lg fa-plus-square-o text-secondary" bindtap="createTaskList"></text>
                 </view>
             </view>
         </view>
-
-        <view wx:if="{{m_labels.length > 0}}">
+        <!-- end: 新建任务清单输入框 -->
+        <!-- begin: 标签筛选器 -->
+        <view wx:if="{{mLabels.length > 0}}">
             <view class="all-labels">
-                <view class="badge badge-pill {{m_label == 0 ? 'badge-info' : 'badge-secondary'}} label" bindtap="applyLabel" data-id="0">全部</view>
-                <view wx:for="{{m_labels}}" wx:key="id" wx:for-item="label" class="badge badge-pill {{m_label == label.id ? 'badge-info' : 'badge-secondary'}} label" bindtap="applyLabel" data-id="{{label.id}}">{{label.name}}</view>
+                <view class="badge badge-pill {{mFilterLabel === 0 ? 'badge-info' : 'badge-secondary'}} label" bindtap="applyFilterLabel" data-id="0">
+                    全部
+                </view>
+                <view wx:for="{{mLabels}}" wx:key="id" wx:for-item="label" class="badge badge-pill {{mFilterLabel === label.id ? 'badge-info' : 'badge-secondary'}} label" bindtap="applyFilterLabel" data-id="{{label.id}}">
+                    {{label.name}}
+                </view>
             </view>
             <view class="separator separator_spacing"></view>
         </view>
-
+        <!-- end: 标签筛选器 -->
+        <!-- begin: 是否归档筛选器 -->
         <view class="all-labels">
-            <view class="badge badge-pill {{m_archived == 0 ? 'badge-warning' : 'badge-secondary'}} label" bindtap="applyArchived" data-archived="0">全部</view>
-            <view class="badge badge-pill {{m_archived == 1 ? 'badge-warning' : 'badge-secondary'}} label" bindtap="applyArchived" data-archived="1">已归档</view>
+            <view class="badge badge-pill {{mFilterArchived === 0 ? 'badge-warning' : 'badge-secondary'}} label" bindtap="applyFilterArchived" data-archived="0">
+                全部
+            </view>
+            <view class="badge badge-pill {{mFilterArchived === 1 ? 'badge-warning' : 'badge-secondary'}} label" bindtap="applyFilterArchived" data-archived="1">
+                已归档
+            </view>
         </view>
-
-        <view wx:for="{{m_task_lists}}" wx:key="id" wx:for-item="task_list" class="weui-panel weui-panel_access">
+        <!-- end: 是否归档筛选器 -->
+        <!-- begin: 任务列表 -->
+        <view wx:for="{{mTaskLists}}" wx:key="id" wx:for-item="taskList" class="weui-panel weui-panel_access">
+            <!-- begin: 列表项头部 -->
             <view class="weui-panel__hd weui-cell_access weui-cell_link task-list__hd">
-                <text class="task-list__hd_text" bindtap="viewTaskList" data-id="{{task_list.id}}">{{task_list.name}}</text>
+                <view class="task-list__hd_text" bindtap="viewTaskList" data-id="{{taskList.id}}">
+                    {{taskList.name}}
+                </view>
                 <view class="pull-right">
-                    <text class="fa-lg text-secondary fa fa-angle-up sort-arrow" bindtap="sortTaskList" data-dir="{{-1}}" data-index="{{index}}"></text>
-                    <text class="fa-lg text-secondary fa fa-angle-down sort-arrow" bindtap="sortTaskList" data-dir="{{1}}" data-index="{{index}}"></text>
+                    <text class="fa fa-lg fa-angle-up text-secondary sort-arrow" bindtap="sortTaskLists" data-dir="-1" data-index="{{index}}"></text>
+                    <text class="fa fa-lg fa-angle-down text-secondary sort-arrow" bindtap="sortTaskLists" data-dir="1" data-index="{{index}}"></text>
                 </view>
             </view>
+            <!-- end: 列表项头部 -->
+            <!-- begin: 列表项中部 -->
             <view class="weui-panel__bd">
                 <view class="weui-media-box weui-media-box_text">
-                    <view wx:if="{{task_list.grouped_tasks.unfinished.count + task_list.grouped_tasks.finished.count > 0}}">
-                        <view wx:for="{{task_list.grouped_tasks.unfinished.content}}" wx:key="id" wx:for-item="task" class="weui-media-box__title weui-media-box__title_in-text task">
-                            <text class="fa fa-square-o task-checkbox" bindtap="finishTask" data-id="{{task.id}}"></text>{{task.content}}
+                    <view wx:if="{{taskList.tasks.unfinished.count + taskList.tasks.finished.count > 0}}">
+                        <view wx:for="{{taskList.tasks.unfinished.content}}" wx:key="id" wx:for-item="task" class="weui-media-box__title weui-media-box__title_in-text task">
+                            <text class="fa fa-square-o task-checkbox" bindtap="checkTask" data-id="{{task.id}}"></text>
+                            {{task.content}}
                         </view>
-                        <view wx:if="{{task_list.grouped_tasks.unfinished.count > 5}}" class="weui-media-box__desc task-list__brief">+{{task_list.grouped_tasks.unfinished.count - 5}} 项待完成
+                        <view wx:if="{{taskList.tasks.unfinished.count > 5}}" class="weui-media-box__desc task-list__brief">
+                            +{{taskList.tasks.unfinished.count - 5}} 项待完成
                         </view>
-                        <view wx:if="{{task_list.grouped_tasks.finished.count > 0}}" class="weui-media-box__desc task-list__brief">{{task_list.grouped_tasks.finished.count}} 项已完成
+                        <view wx:if="{{taskList.tasks.finished.count > 0}}" class="weui-media-box__desc task-list__brief">
+                            {{taskList.tasks.finished.count}} 项已完成
                         </view>
                     </view>
                     <view wx:else class="weui-media-box__desc task-list__brief">清单内容为空</view>
-                    <view wx:if="{{task_list.labels.length > 0}}" class="badges">
-                        <view wx:for="{{task_list.labels}}" wx:key="id" wx:for-item="label" class="badge badge-pill badge-success label" bindtap="applyLabel" data-id="{{label.id}}">{{label.name}}</view>
+                    <view wx:if="{{taskList.labels.length > 0}}" class="badges">
+                        <view wx:for="{{taskList.labels}}" wx:key="id" wx:for-item="label" class="badge badge-pill badge-success label" bindtap="applyFilterIdLabel" data-id="{{label.id}}">
+                            {{label.name}}
+                        </view>
                     </view>
                 </view>
             </view>
+            <!-- end: 列表项中部 -->
+            <!-- begin: 列表项尾部 -->
             <view class="weui-panel__ft">
-                <view class="weui-cell weui-cell_access weui-cell_link" bindtap="viewTaskList" data-id="{{task_list.id}}">
+                <view class="weui-cell weui-cell_access weui-cell_link" bindtap="viewTaskList" data-id="{{taskList.id}}">
                     <view class="weui-cell__bd">查看详情</view>
                 </view>
             </view>
+            <!-- end: 列表项尾部 -->
         </view>
+        <!-- end: 任务列表 -->
     </view>
 </view>
