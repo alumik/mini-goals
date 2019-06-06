@@ -1,42 +1,73 @@
-// pages/task/view/view.js
-
 const app = getApp()
 const fly = app.globalData.fly
 
 Page({
+    /**
+     * 页面的初始数据
+     */
     data: {
-        m_task_list_id: 0,
-        m_create_task_str: '',
+        // 私有变量
+        mIdTaskList: 0,
+        mCreateTask: '',
 
-        m_task_list: null
+        // 页面数据
+        mTaskList: {
+            id: 0,
+            name: '加载中',
+            archived: 0,
+            labels: [],
+            tasks: {
+                unfinished: {
+                    count: 0,
+                    content: []
+                },
+                finished: {
+                    count: 0,
+                    content: []
+                }
+            }
+        }
     },
 
+    /**
+     * 生命周期函数--监听页面加载
+     *
+     * @param options
+     */
     onLoad: function (options) {
         this.setData({
-            m_task_list_id: options.id
+            mIdTaskList: parseInt(options.id)
         })
     },
 
+    /**
+     * 生命周期函数--监听页面显示
+     */
     onShow: function () {
-        this.refreshPage()
+        this.loadTaskList()
     },
 
+    /**
+     * 页面相关事件处理函数--监听用户下拉动作
+     */
     onPullDownRefresh: function () {
-        this.refreshPage()
+        this.loadTaskList()
         wx.stopPullDownRefresh()
     },
 
-    refreshPage: function () {
-        const self = this
+    /**
+     * 加载任务清单
+     */
+    loadTaskList: function () {
         wx.showLoading({
-            title: '加载中',
+            title: '加载中'
         })
-        fly.get(app.globalData.server.task_list, {
+        fly.get('task-list', {
             openid: app.globalData.openid,
-            id_task_list: this.data.m_task_list_id
-        }).then(function (response) {
-            self.setData({
-                m_task_list: response.data
+            id_task_list: this.data.mIdTaskList
+        }).then(response => {
+            this.setData({
+                mTaskList: response.data
             })
             wx.hideLoading()
         }).catch(err => {
@@ -44,59 +75,111 @@ Page({
         })
     },
 
+    /**
+     * 输入响应函数--修改任务清单名
+     *
+     * @param e
+     */
     inputTaskListName: function (e) {
         this.setData({
-            'm_task_list.name': e.detail.value
+            'mTaskList.name': e.detail.value
         })
     },
 
+    /**
+     * 输入响应函数--修改任务名
+     *
+     * @param e
+     */
     inputTaskName: function (e) {
-        const index = e.currentTarget.dataset.index
-        if (e.currentTarget.dataset.type === 'unfinished') {
-            this.data.m_task_list.grouped_tasks.unfinished.content[index].content = e.detail.value
-        } else {
-            this.data.m_task_list.grouped_tasks.finished.content[index].content = e.detail.value
-        }
+        const task = this.getTask(
+            parseInt(e.currentTarget.dataset.finished),
+            parseInt(e.currentTarget.dataset.index)
+        )
+        task.content = e.detail.value
         this.setData({
-            m_task_list: this.data.m_task_list
+            mTaskList: this.data.mTaskList
         })
     },
 
+    /**
+     * 输入响应函数--创建任务
+     *
+     * @param e
+     */
     inputCreateTask: function (e) {
         this.setData({
-            m_create_task_str: e.detail.value
+            mCreateTask: e.detail.value
         })
     },
 
-    taskFocus: function (e) {
-        const index = e.currentTarget.dataset.index
-        let task = null
-        if (e.currentTarget.dataset.type === 'unfinished') {
-            task = this.data.m_task_list.grouped_tasks.unfinished.content[index]
-        } else {
-            task = this.data.m_task_list.grouped_tasks.finished.content[index]
-        }
+    /**
+     * 聚焦响应函数--点击任务
+     *
+     * @param e
+     */
+    focusTask: function (e) {
+        const task = this.getTask(
+            parseInt(e.currentTarget.dataset.finished),
+            parseInt(e.currentTarget.dataset.index)
+        )
         task.focus = true
-        task.old_content = task.content
+        task.oldContent = task.content
         this.setData({
-            m_task_list: this.data.m_task_list
+            mTaskList: this.data.mTaskList
         })
     },
 
-    updateTask: function (e) {
-        const index = e.currentTarget.dataset.index
-        let task = null
-        if (e.currentTarget.dataset.type === 'unfinished') {
-            task = this.data.m_task_list.grouped_tasks.unfinished.content[index]
-        } else {
-            task = this.data.m_task_list.grouped_tasks.finished.content[index]
+    /**
+     * 获取任务对象
+     */
+    getTask: function (finished, index) {
+        if (finished === 0) {
+            return this.data.mTaskList.tasks.unfinished.content[index]
         }
+        return this.data.mTaskList.tasks.finished.content[index]
+    },
+
+    /**
+     * 创建任务
+     *
+     * @param e
+     */
+    createTask: function (e) {
+        if (this.data.mCreateTask !== '') {
+            fly.post('task', {
+                openid: app.globalData.openid,
+                content: {
+                    id_task_list: this.data.mIdTaskList,
+                    content: this.data.mCreateTask
+                }
+            }).then(response => {
+                this.setData({
+                    mCreateTask: ''
+                })
+                this.loadTaskList()
+            }).catch(err => {
+                console.log(err)
+            })
+        }
+    },
+
+    /**
+     * 更新任务
+     *
+     * @param e
+     */
+    updateTask: function (e) {
+        const task = this.getTask(
+            parseInt(e.currentTarget.dataset.finished),
+            parseInt(e.currentTarget.dataset.index)
+        )
         task.focus = false
         this.setData({
-            m_task_list: this.data.m_task_list
+            mTaskList: this.data.mTaskList
         })
-        if (task.old_content && task.old_content !== task.content && task.content !== '') {
-            fly.put(app.globalData.server.task, {
+        if (task.oldContent && task.oldContent !== task.content && task.content !== '') {
+            fly.put('task', {
                 openid: app.globalData.openid,
                 content: task
             }).catch(err => {
@@ -105,76 +188,19 @@ Page({
         }
     },
 
-    deleteTask: function (e) {
-        const self = this
-        fly.delete(app.globalData.server.task, {
-            openid: app.globalData.openid,
-            id_task: e.currentTarget.dataset.id
-        }).then(function (response) {
-            self.refreshPage()
-        }).catch(err => {
-            console.log(err)
-        })
-    },
-
-    deleteTaskList: function (e) {
-        const self = this
-        wx.showModal({
-            title: '删除目标清单',
-            content: '确定要删除该目标清单吗？删除后无法撤销。',
-            success: function (sm) {
-                if (sm.confirm) {
-                    fly.delete(app.globalData.server.task_list, {
-                        openid: app.globalData.openid,
-                        id_task_list: self.data.m_task_list_id
-                    }).then(function (response) {
-                        wx.navigateBack()
-                    }).catch(err => {
-                        console.log(err)
-                    })
-                }
-            }
-        })
-    },
-
-    updateTaskList: function () {
-        const self = this
-        fly.put(app.globalData.server.task_list, {
-            openid: app.globalData.openid,
-            content: [this.data.m_task_list]
-        }).catch(err => {
-            console.log(err)
-        })
-    },
-
-    createTask: function (e) {
-        const self = this
-        if (this.data.m_create_task_str !== '') {
-            fly.post(app.globalData.server.task, {
-                openid: app.globalData.openid,
-                content: {
-                    id_task_list: this.data.m_task_list_id,
-                    content: this.data.m_create_task_str
-                }
-            }).then(function (response) {
-                self.setData({
-                    m_create_task_str: ''
-                })
-                self.refreshPage()
-            }).catch(err => {
-                console.log(err)
-            })
-        }
-    },
-
-    changeUnfinished: function (e) {
-        const self = this
-        const values = e.detail.value;
+    /**
+     * 完成任务
+     *
+     * @param e
+     */
+    checkTask: function (e) {
+        const values = e.detail.value
         const requests = []
-        for (let task of this.data.m_task_list.grouped_tasks.unfinished.content) {
+
+        for (let task of this.data.mTaskList.tasks.unfinished.content) {
             if (values.indexOf(task.id.toString()) !== -1) {
                 task.finished = 1
-                requests.push(fly.put(app.globalData.server.task, {
+                requests.push(fly.put('task', {
                     openid: app.globalData.openid,
                     content: {
                         id: task.id,
@@ -183,23 +209,29 @@ Page({
                 }))
             }
         }
+
         fly.all(requests).then(
-            fly.spread(function () {
-                self.refreshPage()
+            fly.spread(() => {
+                this.loadTaskList()
             })
         ).catch(err => {
             console.log(err)
         })
     },
 
-    changeFinished: function (e) {
-        const self = this
-        const values = e.detail.value;
+    /**
+     * 取消完成任务
+     *
+     * @param e
+     */
+    uncheckTask: function (e) {
+        const values = e.detail.value
         const requests = []
-        for (let task of this.data.m_task_list.grouped_tasks.finished.content) {
+
+        for (let task of this.data.mTaskList.tasks.finished.content) {
             if (values.indexOf(task.id.toString()) === -1) {
                 task.finished = 0
-                requests.push(fly.put(app.globalData.server.task, {
+                requests.push(fly.put('task', {
                     openid: app.globalData.openid,
                     content: {
                         id: task.id,
@@ -208,29 +240,84 @@ Page({
                 }))
             }
         }
+
         fly.all(requests).then(
-            fly.spread(function () {
-                self.refreshPage()
+            fly.spread(() => {
+                this.loadTaskList()
             })
         ).catch(err => {
             console.log(err)
         })
     },
 
-    archive: function () {
-        const self = this
-        fly.put(app.globalData.server.task_list, {
+    /**
+     * 归档或取消归档任务
+     */
+    archiveTask: function () {
+        fly.put('task-list', {
             openid: app.globalData.openid,
             content: [
                 {
-                    "id": this.data.m_task_list_id,
-                    "archived": this.data.m_task_list.archived === 0 ? 1 : 0
+                    id: this.data.mIdTaskList,
+                    archived: this.data.mTaskList.archived === 0 ? 1 : 0
                 }
             ]
-        }).then(function (response) {
-            self.refreshPage()
+        }).then(response => {
+            this.loadTaskList()
         }).catch(err => {
             console.log(err)
+        })
+    },
+
+    /**
+     * 删除任务
+     *
+     * @param e
+     */
+    deleteTask: function (e) {
+        fly.delete('task', {
+            openid: app.globalData.openid,
+            id_task: parseInt(e.currentTarget.dataset.id)
+        }).then(response => {
+            this.loadTaskList()
+        }).catch(err => {
+            console.log(err)
+        })
+    },
+
+    /**
+     * 修改任务清单名
+     */
+    updateTaskList: function () {
+        fly.put('task-list', {
+            openid: app.globalData.openid,
+            content: [
+                this.data.mTaskList
+            ]
+        }).catch(err => {
+            console.log(err)
+        })
+    },
+
+    /**
+     * 删除任务清单
+     */
+    deleteTaskList: function () {
+        wx.showModal({
+            title: '删除任务清单',
+            content: '确定要删除该任务清单吗？删除后无法撤销。',
+            success: res => {
+                if (res.confirm) {
+                    fly.delete('task-list', {
+                        openid: app.globalData.openid,
+                        id_task_list: this.data.mIdTaskList
+                    }).then(response => {
+                        wx.navigateBack()
+                    }).catch(err => {
+                        console.log(err)
+                    })
+                }
+            }
         })
     }
 })

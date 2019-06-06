@@ -1,5 +1,3 @@
-/* pages/task/view/view.wxss */
-
 .weui-btn:first-child {
     margin-top: 30px;
 }

@@ -1,20 +1,21 @@
-<!--pages/task/view/view.wxml-->
-
 <view class="page">
     <view class="page__bd">
+        <!-- begin: 清单标题 -->
         <view class="weui-cells__title">清单标题</view>
         <view class="weui-cells weui-cells_after-title">
             <view class="weui-cell weui-cell_input">
                 <view class="weui-cell__bd">
-                    <input class="weui-input" placeholder="请输入清单标题" value="{{m_task_list.name}}" bindinput="inputTaskListName" bindblur="updateTaskList" />
+                    <input class="weui-input" placeholder="请输入清单标题" value="{{mTaskList.name}}" bindinput="inputTaskListName" bindblur="updateTaskList" />
                 </view>
             </view>
         </view>
-
-        <view class="weui-cells__title">待完成目标</view>
+        <!-- end: 清单标题 -->
+        <!-- begin: 待完成任务 -->
+        <view class="weui-cells__title">待完成任务</view>
         <view class="weui-cells weui-cells_after-title">
-            <checkbox-group wx:if="{{m_task_list.grouped_tasks.unfinished.count > 0}}" bindchange="changeUnfinished">
-                <view class="weui-cell weui-cell_input" wx:for="{{m_task_list.grouped_tasks.unfinished.content}}" wx:for-item="task" wx:key="id">
+            <!-- begin: 任务列表 -->
+            <checkbox-group wx:if="{{mTaskList.tasks.unfinished.count > 0}}" bindchange="checkTask">
+                <view class="weui-cell weui-cell_input" wx:for="{{mTaskList.tasks.unfinished.content}}" wx:for-item="task" wx:key="id">
                     <label>
                         <checkbox class="weui-check" value="{{task.id}}" checked="{{task.finished}}" />
                         <view class="weui-cell__hd weui-check__hd_in-checkbox">
@@ -23,13 +24,15 @@
                         </view>
                     </label>
                     <view class="weui-cell__bd">
-                        <input class="weui-input" placeholder="请输入目标内容" value="{{task.content}}" bindfocus="taskFocus" bindinput="inputTaskName" bindblur="updateTask" data-index="{{index}}" data-type="unfinished" />
+                        <input class="weui-input" placeholder="请输入任务内容" value="{{task.content}}" bindfocus="focusTask" bindinput="inputTaskName" bindblur="updateTask" data-index="{{index}}" data-finished="0" />
                     </view>
                     <view class="weui-cell__ft" wx:if="{{task.focus}}" bindtap="deleteTask" data-id="{{task.id}}">
                         <text class="fa fa-lg fa-times-circle text-secondary"></text>
                     </view>
                 </view>
             </checkbox-group>
+            <!-- end: 任务列表 -->
+            <!-- begin: 添加任务 -->
             <view class="weui-cell weui-cell_input">
                 <view class="weui-cell__hd weui-check__hd_in-checkbox">
                     <view class="add-task">
@@ -37,15 +40,17 @@
                     </view>
                 </view>
                 <view class="weui-cell__bd">
-                    <input class="weui-input" placeholder="新建目标" value="{{m_create_task_str}}" bindinput="inputCreateTask" bindblur="createTask" />
+                    <input class="weui-input" placeholder="新建任务" value="{{mCreateTask}}" bindinput="inputCreateTask" bindblur="createTask" />
                 </view>
             </view>
+            <!-- end: 添加任务 -->
         </view>
-
-        <view class="weui-cells__title">已完成目标</view>
+        <!-- end: 待完成任务 -->
+        <!-- begin: 已完成任务 -->
+        <view class="weui-cells__title">已完成任务</view>
         <view class="weui-cells weui-cells_after-title">
-            <checkbox-group wx:if="{{m_task_list.grouped_tasks.finished.count > 0}}" bindchange="changeFinished">
-                <view class="weui-cell weui-cell_input" wx:for="{{m_task_list.grouped_tasks.finished.content}}" wx:for-item="task" wx:key="id">
+            <checkbox-group wx:if="{{mTaskList.tasks.finished.count > 0}}" bindchange="uncheckTask">
+                <view class="weui-cell weui-cell_input" wx:for="{{mTaskList.tasks.finished.content}}" wx:for-item="task" wx:key="id">
                     <label>
                         <checkbox class="weui-check" value="{{task.id}}" checked="{{task.finished}}" />
                         <view class="weui-cell__hd weui-check__hd_in-checkbox">
@@ -54,7 +59,7 @@
                         </view>
                     </label>
                     <view class="weui-cell__bd">
-                        <input class="weui-input" placeholder="请输入目标内容" value="{{task.content}}" bindfocus="taskFocus" bindinput="inputTaskName" bindblur="updateTask" data-index="{{index}}" data-type="finished" />
+                        <input class="weui-input" placeholder="请输入任务内容" value="{{task.content}}" bindfocus="focusTask" bindinput="inputTaskName" bindblur="updateTask" data-index="{{index}}" data-finished="1" />
                     </view>
                     <view class="weui-cell__ft" wx:if="{{task.focus}}" bindtap="deleteTask" data-id="{{task.id}}">
                         <text class="fa fa-lg fa-times-circle text-secondary"></text>
@@ -62,26 +67,33 @@
                 </view>
             </checkbox-group>
             <view wx:else class="weui-cell">
-                <view class="weui-cell__bd">暂无目标</view>
+                <view class="weui-cell__bd">暂无任务</view>
             </view>
         </view>
-
+        <!-- end: 已完成任务 -->
+        <!-- begin: 标签 -->
         <view class="weui-cells__title">标签</view>
         <view class="weui-cells weui-cells_after-title">
-            <navigator url="/pages/task/label/label?id={{m_task_list_id}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+            <navigator url="/pages/task/label/label?id={{mIdTaskList}}" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
                 <view class="weui-cell__bd">
-                    <view wx:if="{{m_task_list.labels.length > 0}}" class="badges">
-                        <view wx:for="{{m_task_list.labels}}" wx:key="id" wx:for-item="label" class="badge badge-pill badge-success label">{{label.name}}</view>
+                    <view wx:if="{{mTaskList.labels.length > 0}}" class="badges">
+                        <view wx:for="{{mTaskList.labels}}" wx:key="id" wx:for-item="label" class="badge badge-pill badge-success label">
+                            {{label.name}}
+                        </view>
                     </view>
                     <view wx:else>暂无标签</view>
                 </view>
                 <view class="weui-cell__ft weui-cell__ft_in-access"></view>
             </navigator>
         </view>
-
+        <!-- end: 标签 -->
+        <!-- begin: 操作按钮 -->
         <view class="page__bd_spacing">
-            <button class="weui-btn" type="default" bindtap="archive">{{m_task_list.archived ? "取消归档" : "归档"}}</button>
+            <button class="weui-btn" type="default" bindtap="archive">
+                {{mTaskList.archived ? "取消归档" : "归档"}}
+            </button>
             <button class="weui-btn" type="warn" bindtap="deleteTaskList">删除</button>
         </view>
+        <!-- end: 操作按钮 -->
     </view>
 </view>
