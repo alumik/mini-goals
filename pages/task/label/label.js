@@ -1,5 +1,3 @@
-// pages/task/label/label.js
-
 const app = getApp()
 const fly = app.globalData.fly
 
@@ -8,121 +6,114 @@ Page({
      * 页面的初始数据
      */
     data: {
-        m_task_list_id: 0,
-        m_create_label_str: '',
-        m_too_long: false,
+        // 私有变量
+        mIdTaskList: 0,
+        mCreateLabel: '',
+        mLabelNameTooLong: false,
 
-        m_labels: null
+        // 页面数据
+        mLabels: []
     },
 
     /**
      * 生命周期函数--监听页面加载
+     *
+     * @param options
      */
     onLoad: function (options) {
         this.setData({
-            m_task_list_id: options.id
+            mIdTaskList: parseInt(options.id)
         })
-        this.refreshPage()
-    },
-
-    save: function () {
-        const labels = []
-        for (let label of this.data.m_labels) {
-            if (label.checked) {
-                labels.push(label.name)
-            }
-        }
-        fly.post(app.globalData.server.task_label, {
-            openid: app.globalData.openid,
-            content: {
-                id_task_list: this.data.m_task_list_id,
-                labels: labels
-            }
-        }).then(function (response) {
-            wx.navigateBack()
-        }).catch(err => {
-            console.log(err)
-        })
+        this.loadLabels()
     },
 
     /**
      * 页面相关事件处理函数--监听用户下拉动作
      */
     onPullDownRefresh: function () {
-        this.refreshPage()
+        this.loadLabels()
         wx.stopPullDownRefresh()
     },
 
-    refreshPage: function () {
-        const self = this
+    /**
+     * 加载标签
+     */
+    loadLabels: function () {
         wx.showLoading({
-            title: '加载中',
+            title: '加载中'
         })
 
-        const get_checked_labels = fly.get(app.globalData.server.task_list, {
+        const getCheckedLabels = fly.get('task-list', {
             openid: app.globalData.openid,
-            id_task_list: this.data.m_task_list_id
+            id_task_list: this.data.mIdTaskList
         })
-        const get_all_labels = fly.get(app.globalData.server.task_label, {
+        const getAllLabels = fly.get('task-label', {
             openid: app.globalData.openid
         })
 
-        fly.all([get_all_labels, get_checked_labels]).then(fly.spread(function (all_labels, checked_labels) {
-            checked_labels = checked_labels.data.labels
-            all_labels = all_labels.data
-            for (let label of all_labels) {
-                for (let checked_label of checked_labels) {
-                    if (label.id === checked_label.id) {
-                        label.checked = true
-                        break
+        fly.all([getCheckedLabels, getAllLabels]).then(
+            fly.spread((checkedLabels, allLabels) => {
+                checkedLabels = checkedLabels.data.labels
+                allLabels = allLabels.data
+                for (let label of allLabels) {
+                    for (let checkedLabel of checkedLabels) {
+                        if (label.id === checkedLabel.id) {
+                            label.checked = true
+                            break
+                        }
                     }
                 }
-            }
-            self.setData({
-                m_labels: all_labels
+                this.setData({
+                    mLabels: allLabels
+                })
+                wx.hideLoading()
             })
-            wx.hideLoading()
-        })).catch(err => {
+        ).catch(err => {
             console.log(err)
         })
     },
 
+    /**
+     * 输入响应函数--创建标签
+     *
+     * @param e
+     */
     inputCreateLabel: function (e) {
-        if (e.detail.value.length > 10) {
-            this.setData({
-                m_too_long: true,
-                m_create_label_str: e.detail.value
-            })
-        } else {
-            this.setData({
-                m_too_long: false,
-                m_create_label_str: e.detail.value
-            })
-        }
-    },
-
-    createLabel: function () {
-        if (this.data.m_create_label_str.length > 10 || this.data.m_create_label_str === '') {
-            return
-        }
-        for (let label of this.data.m_labels) {
-            if (label.name === this.data.m_create_label_str) {
-                return
-            }
-        }
-        this.data.m_labels.push({
-            name: this.data.m_create_label_str,
-            checked: true
-        })
         this.setData({
-            m_create_label_str: '',
-            m_too_long: false,
-            m_labels: this.data.m_labels
+            mLabelNameTooLong: e.detail.value.length > 10,
+            mCreateLabel: e.detail.value
         })
     },
 
-    checkboxChange: function (e) {
-        const labels = this.data.m_labels
+    /**
+     * 创建标签
+     */
+    createLabel: function () {
+        if (this.data.mCreateLabel.length <= 10 && this.data.mCreateLabel !== '') {
+            for (let label of this.data.mLabels) {
+                if (label.name === this.data.mCreateLabel) {
+                    return
+                }
+            }
+            this.data.mLabels.push({
+                name: this.data.mCreateLabel,
+                checked: true
+            })
+            this.setData({
+                mCreateLabel: '',
+                mLabelNameTooLong: false,
+                mLabels: this.data.mLabels
+            })
+        }
+    },
+
+    /**
+     * 选择标签
+     *
+     * @param e
+     */
+    checkLabels: function (e) {
+        const labels = this.data.mLabels
         const values = e.detail.value
 
         for (let label of labels) {
@@ -136,7 +127,30 @@ Page({
         }
 
         this.setData({
-            m_labels: labels
+            mLabels: labels
+        })
+    },
+
+    /**
+     * 保存
+     */
+    save: function () {
+        const labels = []
+        for (let label of this.data.mLabels) {
+            if (label.checked) {
+                labels.push(label.name)
+            }
+        }
+        fly.post('task-label', {
+            openid: app.globalData.openid,
+            content: {
+                id_task_list: this.data.mIdTaskList,
+                labels: labels
+            }
+        }).then(response => {
+            wx.navigateBack()
+        }).catch(err => {
+            console.log(err)
         })
     }
 })
