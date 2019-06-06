@@ -80,7 +80,7 @@
         </view>
 
         <view class="page__bd_spacing">
-            <button class="weui-btn" type="default">归档</button>
+            <button class="weui-btn" type="default" bindtap="archive">{{m_task_list.archived ? "取消归档" : "归档"}}</button>
             <button class="weui-btn" type="warn" bindtap="deleteTaskList">删除</button>
         </view>
     </view>

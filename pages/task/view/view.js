@@ -215,5 +215,22 @@ Page({
         ).catch(err => {
             console.log(err)
         })
+    },
+
+    archive: function () {
+        const self = this
+        fly.put(app.globalData.server_url.task_list, {
+            openid: app.globalData.openid,
+            content: [
+                {
+                    "id": this.data.m_task_list_id,
+                    "archived": this.data.m_task_list.archived === 0 ? 1 : 0
+                }
+            ]
+        }).then(function (response) {
+            self.refreshPage()
+        }).catch(err => {
+            console.log(err)
+        })
     }
 })
