@@ -140,6 +140,46 @@ Page({
     },
 
     /**
+     * 本地移除任务
+     *
+     * @param finished
+     * @param index
+     */
+    removeTask: function (finished, index) {
+        if (finished === 0) {
+            this.data.mTaskList.tasks.unfinished.content.splice(index, 1)
+        } else {
+            this.data.mTaskList.tasks.finished.content.splice(index, 1)
+        }
+        this.setData({
+            mTaskList: this.data.mTaskList
+        })
+    },
+
+    /**
+     * 本地插入任务
+     *
+     * @param finished
+     * @param task
+     */
+    insertTask: function (finished, task) {
+        const array = finished === 0 ? this.data.mTaskList.tasks.unfinished.content : this.data.mTaskList.tasks.finished.content
+        for (let i = 0; i < array.length; i++) {
+            if (task.id < array[i].id) {
+                array.splice(i, 0, task)
+                this.setData({
+                    mTaskList: this.data.mTaskList
+                })
+                return
+            }
+        }
+        array.push(task)
+        this.setData({
+            mTaskList: this.data.mTaskList
+        })
+    },
+
+    /**
      * 创建任务
      *
      * @param e
@@ -199,14 +239,12 @@ Page({
                     id: task.id,
                     finished: 1
                 }))
+                this.removeTask(0, this.data.mTaskList.tasks.unfinished.content.indexOf(task))
+                this.insertTask(1, task)
             }
         }
 
-        fly.all(requests).then(
-            fly.spread(() => {
-                this.loadTaskList()
-            })
-        ).catch(err => {
+        fly.all(requests).catch(err => {
             console.log(err)
         })
     },
@@ -227,14 +265,12 @@ Page({
                     id: task.id,
                     finished: 0
                 }))
+                this.removeTask(1, this.data.mTaskList.tasks.finished.content.indexOf(task))
+                this.insertTask(0, task)
             }
         }
 
-        fly.all(requests).then(
-            fly.spread(() => {
-                this.loadTaskList()
-            })
-        ).catch(err => {
+        fly.all(requests).catch(err => {
             console.log(err)
         })
     },
@@ -251,7 +287,9 @@ Page({
                 }
             ]
         }).then(response => {
-            this.loadTaskList()
+            this.setData({
+                'mTaskList.archived': this.data.mTaskList.archived === 0 ? 1 : 0
+            })
         }).catch(err => {
             console.log(err)
         })
@@ -263,13 +301,17 @@ Page({
      * @param e
      */
     deleteTask: function (e) {
+        const finished = parseInt(e.currentTarget.dataset.finished)
+        const index = parseInt(e.currentTarget.dataset.index)
+        const task = this.getTask(finished, index)
+
         fly.delete('task', {
-            id_task: parseInt(e.currentTarget.dataset.id)
-        }).then(response => {
-            this.loadTaskList()
+            id_task: task.id
         }).catch(err => {
             console.log(err)
         })
+
+        this.removeTask(finished, index)
     },
 
     /**

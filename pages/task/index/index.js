@@ -159,21 +159,23 @@ Page({
         const dir = parseInt(e.currentTarget.dataset.dir)
 
         if (dir === -1 && index > 0 || dir === 1 && index < this.data.mTaskLists.length) {
+            const listA = this.data.mTaskLists[index]
+            const listB = this.data.mTaskLists[index + dir]
+
+            const tmpOrder = listA.order
+            listA.order = listB.order
+            listB.order = tmpOrder
+
             fly.put('task-list', {
-                data: [
-                    {
-                        id: this.data.mTaskLists[index].id,
-                        order: this.data.mTaskLists[index + dir].order
-                    },
-                    {
-                        id: this.data.mTaskLists[index + dir].id,
-                        order: this.data.mTaskLists[index].order
-                    }
-                ]
-            }).then(response => {
-                this.loadTaskLists()
+                data: [listA, listB]
             }).catch(err => {
                 console.log(err)
+            })
+
+            this.data.mTaskLists[index] = listB
+            this.data.mTaskLists[index + dir] = listA
+            this.setData({
+                mTaskLists: this.data.mTaskLists
             })
         }
     },
@@ -195,13 +197,34 @@ Page({
      * @param e
      */
     checkTask: function (e) {
-        fly.put('task', {
-            id: parseInt(e.currentTarget.dataset.id),
-            finished: 1
-        }).then(response => {
-            this.loadTaskLists()
-        }).catch(err => {
+        const taskListIndex = parseInt(e.currentTarget.dataset.taskListIndex)
+        const taskIndex = parseInt(e.currentTarget.dataset.taskIndex)
+        const unfinished = this.data.mTaskLists[taskListIndex].tasks.unfinished.content
+        const finished = this.data.mTaskLists[taskListIndex].tasks.finished.content
+        const task = unfinished[taskIndex]
+
+        task.finished = 1
+        this.data.mTaskLists[taskListIndex].tasks.finished.count += 1
+        this.data.mTaskLists[taskListIndex].tasks.unfinished.count -= 1
+        unfinished.splice(taskIndex, 1)
+
+        let set = false
+        for (let i = 0; i < finished.length; i++) {
+            if (task.id < finished[i].id) {
+                finished.splice(i, 0, task)
+                set = true
+                break
+            }
+        }
+        if (!set) {
+            finished.push(task)
+        }
+
+        fly.put('task', task).catch(err => {
             console.log(err)
+        })
+        this.setData({
+            mTaskLists: this.data.mTaskLists
         })
     },
 

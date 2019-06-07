@@ -26,7 +26,7 @@
                     <view class="weui-cell__bd">
                         <input class="weui-input" placeholder="请输入任务内容" value="{{task.content}}" bindfocus="focusTask" bindinput="inputTaskName" bindblur="updateTask" data-index="{{index}}" data-finished="0" />
                     </view>
-                    <view class="weui-cell__ft" wx:if="{{task.focus}}" bindtap="deleteTask" data-id="{{task.id}}">
+                    <view class="weui-cell__ft" wx:if="{{task.focus}}" bindtap="deleteTask" data-index="{{index}}" data-finished="0">
                         <text class="fa fa-lg fa-times-circle text-secondary"></text>
                     </view>
                 </view>
@@ -61,7 +61,7 @@
                     <view class="weui-cell__bd">
                         <input class="weui-input" placeholder="请输入任务内容" value="{{task.content}}" bindfocus="focusTask" bindinput="inputTaskName" bindblur="updateTask" data-index="{{index}}" data-finished="1" />
                     </view>
-                    <view class="weui-cell__ft" wx:if="{{task.focus}}" bindtap="deleteTask" data-id="{{task.id}}">
+                    <view class="weui-cell__ft" wx:if="{{task.focus}}" bindtap="deleteTask" data-index="{{index}}" data-finished="1">
                         <text class="fa fa-lg fa-times-circle text-secondary"></text>
                     </view>
                 </view>

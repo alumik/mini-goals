@@ -56,13 +56,13 @@
         </view>
         <!-- end: 是否归档筛选器 -->
         <!-- begin: 任务列表 -->
-        <view wx:for="{{mTaskLists}}" wx:key="id" wx:for-item="taskList" class="weui-panel weui-panel_access">
+        <view wx:for="{{mTaskLists}}" wx:key="id" wx:for-index="taskListIndex" wx:for-item="taskList" class="weui-panel weui-panel_access">
             <!-- begin: 列表项头部 -->
             <view class="weui-panel__hd task-list__hd">
                 <view class="task-list__hd_text">{{taskList.name}}</view>
                 <view class="pull-right">
-                    <text class="fa fa-lg fa-angle-up text-secondary sort-arrow" bindtap="sortTaskLists" data-dir="-1" data-index="{{index}}"></text>
-                    <text class="fa fa-lg fa-angle-down text-secondary sort-arrow" bindtap="sortTaskLists" data-dir="1" data-index="{{index}}"></text>
+                    <text class="fa fa-lg fa-angle-up text-secondary sort-arrow" bindtap="sortTaskLists" data-dir="-1" data-index="{{taskListIndex}}"></text>
+                    <text class="fa fa-lg fa-angle-down text-secondary sort-arrow" bindtap="sortTaskLists" data-dir="1" data-index="{{taskListIndex}}"></text>
                 </view>
             </view>
             <!-- end: 列表项头部 -->
@@ -71,7 +71,7 @@
                 <view class="weui-media-box weui-media-box_text">
                     <view wx:if="{{taskList.tasks.unfinished.count + taskList.tasks.finished.count > 0}}">
                         <view wx:for="{{taskList.tasks.unfinished.content}}" wx:key="id" wx:for-item="task" wx:if="{{index < 5}}" class="weui-media-box__title weui-media-box__title_in-text task">
-                            <text class="fa fa-square-o task-checkbox" bindtap="checkTask" data-id="{{task.id}}"></text>
+                            <text class="fa fa-square-o task-checkbox" bindtap="checkTask" data-task-list-index="{{taskListIndex}}" data-task-index="{{index}}"></text>
                             {{task.content}}
                         </view>
                         <view wx:if="{{taskList.tasks.unfinished.count > 5}}" class="weui-media-box__desc task-list__brief">
