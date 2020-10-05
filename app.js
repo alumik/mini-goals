@@ -1,9 +1,9 @@
 import Fly from 'miniprogram_npm/flyio/index'
 
-const prodURL = 'https://aliyun.alumik.cn:5181/api/v1/'
+const prodURL = ''
 const devURL = 'http://localhost/api/v1/'
 const fly = new Fly()
-fly.config.baseURL = prodURL
+fly.config.baseURL = devURL
 
 App({
     onLaunch: function () {
