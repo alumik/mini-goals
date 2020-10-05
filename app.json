@@ -6,8 +6,7 @@
         "pages/task/label/label"
     ],
     "tabBar": {
-        "list": [
-            {
+        "list": [{
                 "pagePath": "pages/task/index/index",
                 "text": "任务",
                 "iconPath": "res/icons/black/dot-circle-o.png",

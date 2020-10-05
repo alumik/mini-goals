@@ -280,12 +280,10 @@ Page({
      */
     archiveTask: function () {
         fly.put('task-list', {
-            data: [
-                {
-                    id: this.data.mIdTaskList,
-                    archived: this.data.mTaskList.archived === 0 ? 1 : 0
-                }
-            ]
+            data: [{
+                id: this.data.mIdTaskList,
+                archived: this.data.mTaskList.archived === 0 ? 1 : 0
+            }]
         }).then(response => {
             this.setData({
                 'mTaskList.archived': this.data.mTaskList.archived === 0 ? 1 : 0

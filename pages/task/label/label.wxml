@@ -7,8 +7,10 @@
                 <label class="weui-cell weui-check__label" wx:for="{{mLabels}}" wx:for-item="label" wx:key="id">
                     <checkbox class="weui-check" value="{{label.name}}" checked="{{label.checked}}" />
                     <view class="weui-cell__hd weui-check__hd_in-checkbox">
-                        <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!label.checked}}"></icon>
-                        <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{label.checked}}"></icon>
+                        <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!label.checked}}">
+                        </icon>
+                        <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{label.checked}}">
+                        </icon>
                     </view>
                     <view class="weui-cell__bd">{{label.name}}</view>
                 </label>
@@ -20,7 +22,8 @@
                     </view>
                 </view>
                 <view class="weui-cell__bd">
-                    <input class="weui-input" placeholder="新建标签" value="{{mCreateLabel}}" bindinput="inputCreateLabel" bindblur="createLabel" />
+                    <input class="weui-input" placeholder="新建标签" value="{{mCreateLabel}}" bindinput="inputCreateLabel"
+                        bindblur="createLabel" />
                 </view>
             </view>
         </view>
