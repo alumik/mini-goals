@@ -16,15 +16,12 @@
         <view class="weui-cells weui-cells_after-title">
             <!-- begin: 任务列表 -->
             <checkbox-group wx:if="{{mTaskList.tasks.unfinished.count > 0}}" bindchange="checkTask">
-                <view class="weui-cell weui-cell_input" wx:for="{{mTaskList.tasks.unfinished.content}}"
-                    wx:for-item="task" wx:key="id">
+                <view class="weui-cell weui-cells_checkbox weui-cell_input"
+                    wx:for="{{mTaskList.tasks.unfinished.content}}" wx:for-item="task" wx:key="id">
                     <label>
-                        <checkbox class="weui-check" value="{{task.id}}" checked="{{task.finished}}" />
-                        <view class="weui-cell__hd weui-check__hd_in-checkbox">
-                            <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!task.finished}}">
-                            </icon>
-                            <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{task.finished}}">
-                            </icon>
+                        <view class="weui-cell__hd">
+                            <checkbox class="weui-check" value="{{task.id}}" checked="{{task.finished}}" />
+                            <icon type="circle" size="24"></icon>
                         </view>
                     </label>
                     <view class="weui-cell__bd">
@@ -40,11 +37,6 @@
             <!-- end: 任务列表 -->
             <!-- begin: 添加任务 -->
             <view class="weui-cell weui-cell_input">
-                <view class="weui-cell__hd weui-check__hd_in-checkbox">
-                    <view class="add-task">
-                        <text class="fa fa-lg fa-plus-circle text-secondary"></text>
-                    </view>
-                </view>
                 <view class="weui-cell__bd">
                     <input class="weui-input" placeholder="新建任务" value="{{mCreateTask}}" bindinput="inputCreateTask"
                         bindblur="createTask" />
@@ -57,17 +49,14 @@
         <view class="weui-cells__title">已完成任务</view>
         <view class="weui-cells weui-cells_after-title">
             <checkbox-group wx:if="{{mTaskList.tasks.finished.count > 0}}" bindchange="uncheckTask">
-                <view class="weui-cell weui-cell_input" wx:for="{{mTaskList.tasks.finished.content}}" wx:for-item="task"
-                    wx:key="id">
-                    <label>
-                        <checkbox class="weui-check" value="{{task.id}}" checked="{{task.finished}}" />
-                        <view class="weui-cell__hd weui-check__hd_in-checkbox">
-                            <icon class="weui-icon-checkbox_circle" type="circle" size="23" wx:if="{{!task.finished}}">
-                            </icon>
-                            <icon class="weui-icon-checkbox_success" type="success" size="23" wx:if="{{task.finished}}">
-                            </icon>
-                        </view>
-                    </label>
+                <view class="weui-cell weui-cells_checkbox weui-cell_input"
+                    wx:for="{{mTaskList.tasks.finished.content}}" wx:for-item="task" wx:key="id">
+                    <view class="weui-cell__hd">
+                        <label>
+                            <checkbox class="weui-check" value="{{task.id}}" checked="{{task.finished}}" />
+                            <icon type="success" size="24"></icon>
+                        </label>
+                    </view>
                     <view class="weui-cell__bd">
                         <input class="weui-input" placeholder="请输入任务内容" value="{{task.content}}" bindfocus="focusTask"
                             bindinput="inputTaskName" bindblur="updateTask" data-index="{{index}}" data-finished="1" />
@@ -103,7 +92,7 @@
         <!-- end: 标签 -->
         <!-- begin: 操作按钮 -->
         <view class="page__bd_spacing">
-            <button class="weui-btn" type="default" bindtap="archiveTask">
+            <button class="weui-btn" type="primary" bindtap="archiveTask">
                 {{mTaskList.archived ? "取消归档" : "归档"}}
             </button>
             <button class="weui-btn" type="warn" bindtap="deleteTaskList">删除</button>

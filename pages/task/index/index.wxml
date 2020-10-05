@@ -1,24 +1,20 @@
 <view class="page">
     <view class="page__bd">
         <!-- begin: 搜索框 -->
-        <view class="weui-search-bar search">
-            <view class="weui-search-bar__form">
+        <view class="weui-search-bar {{mSearchShowed ? 'weui-search-bar_focusing' : ''}}" id="searchBar">
+            <form class="weui-search-bar__form">
                 <view class="weui-search-bar__box">
-                    <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
+                    <i class="weui-icon-search"></i>
                     <input type="text" class="weui-search-bar__input" placeholder="搜索" value="{{mFilterName}}"
                         focus="{{mSearchShowed}}" bindinput="inputFilterName" bindconfirm="applyFilterName" />
-                    <view class="weui-icon-clear" wx:if="{{mFilerName.length > 0}}" bindtap="clearFilterName">
-                        <icon type="clear" size="14"></icon>
-                    </view>
+                    <span class="weui-icon-clear" wx:if="{{mFilterName.length > 0}}" bindtap="clearFilterName"></span>
                 </view>
-                <label class="weui-search-bar__label" hidden="{{mSearchShowed}}" bindtap="showFilterName">
-                    <icon class="weui-icon-search" type="search" size="14"></icon>
-                    <view class="weui-search-bar__text">搜索</view>
+                <label class="weui-search-bar__label" bindtap="showFilterName">
+                    <i class="weui-icon-search"></i>
+                    <span class="weui-search-bar__text">搜索</span>
                 </label>
-            </view>
-            <view class="weui-search-bar__cancel-btn" hidden="{{!mSearchShowed}}" bindtap="hideFilterName">
-                取消
-            </view>
+            </form>
+            <view class="weui-search-bar__cancel-btn" bindtap="hideFilterName">取消</view>
         </view>
         <!-- end: 搜索框 -->
         <!-- begin: 新建任务清单输入框 -->
