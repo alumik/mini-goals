@@ -148,8 +148,10 @@ Page({
     removeTask: function (finished, index) {
         if (finished === 0) {
             this.data.mTaskList.tasks.unfinished.content.splice(index, 1)
+            this.data.mTaskList.tasks.unfinished.count--
         } else {
             this.data.mTaskList.tasks.finished.content.splice(index, 1)
+            this.data.mTaskList.tasks.finished.count--
         }
         this.setData({
             mTaskList: this.data.mTaskList
@@ -163,17 +165,18 @@ Page({
      * @param task
      */
     insertTask: function (finished, task) {
-        const array = finished === 0 ? this.data.mTaskList.tasks.unfinished.content : this.data.mTaskList.tasks.finished.content
-        for (let i = 0; i < array.length; i++) {
-            if (task.id < array[i].id) {
-                array.splice(i, 0, task)
+        const array = finished === 0 ? this.data.mTaskList.tasks.unfinished : this.data.mTaskList.tasks.finished
+        array.count++
+        for (let i = 0; i < array.content.length; i++) {
+            if (task.id < array.content[i].id) {
+                array.content.splice(i, 0, task)
                 this.setData({
                     mTaskList: this.data.mTaskList
                 })
                 return
             }
         }
-        array.push(task)
+        array.content.push(task)
         this.setData({
             mTaskList: this.data.mTaskList
         })
