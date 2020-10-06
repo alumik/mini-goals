@@ -1,5 +1,4 @@
 @import "styles/badge.wxss";
-@import "styles/weui-wxss/dist/style/weui.wxss";
 @import "styles/fontawesome-wxss/fontawesome.wxss";
 
 .container {
