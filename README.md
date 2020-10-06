@@ -1,5 +1,19 @@
 # 小目标微信小程序
 
+## 预览
+
+### 任务清单列表
+
+![任务清单列表](https://raw.githubusercontent.com/AlumiK/github-playground/master/Pictures/mini-goals/index.png)
+
+### 任务清单详情
+
+![任务清单详情](https://raw.githubusercontent.com/AlumiK/github-playground/master/Pictures/mini-goals/task_list.png)
+
+### 选择标签
+
+![选择标签](https://raw.githubusercontent.com/AlumiK/github-playground/master/Pictures/mini-goals/label.png)
+
 ## 功能列表
 
 - 安全模块
