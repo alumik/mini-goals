@@ -4,6 +4,3 @@
 [submodule "styles/fontawesome-wxss"]
 	path = styles/fontawesome-wxss
 	url = https://github.com/SakuraDon99/fontawesome-wxss.git
-[submodule "styles/WXBootstrap"]
-	path = styles/WXBootstrap
-	url = https://github.com/WilleamZhao/WXBootstrap.git
