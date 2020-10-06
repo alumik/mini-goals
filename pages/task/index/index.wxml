@@ -24,8 +24,8 @@
                     <input class="weui-input" placeholder="新建任务清单" bindinput="inputCreateTaskList"
                         bindconfirm="createTaskList" value="{{mCreateTaskList}}" />
                 </view>
-                <view class="weui-cell__ft">
-                    <text class="fa fa-lg fa-plus-square-o text-secondary" bindtap="createTaskList"></text>
+                <view class="weui-cell__ft" bindtap="createTaskList">
+                    <text class="fa fa-lg fa-plus-square-o text-secondary"></text>
                 </view>
             </view>
         </view>
