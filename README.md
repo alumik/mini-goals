@@ -2,7 +2,7 @@
 
 ## 预览
 
-![预览图](https://raw.githubusercontent.com/AlumiK/github-playground/master/Pictures/mini-goals/stitched.png)
+![预览图](https://raw.githubusercontent.com/AlumiK/github-playground/main/ImageHost/mini-goals/stitched.png)
 
 ## 功能列表
 
