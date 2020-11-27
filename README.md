@@ -1,7 +1,5 @@
 # 小目标微信小程序
 
-## 预览
-
 ![预览图](https://raw.githubusercontent.com/AlumiK/github-playground/main/ImageHost/mini-goals/stitched.png)
 
 ## 功能列表
